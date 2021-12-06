@@ -1,0 +1,39 @@
+esphome:
+  name: test3
+  platform: ESP8266
+  board: d1_mini
+
+# Enable logging
+logger:
+
+# Enable Home Assistant API
+api:
+  password: ""
+
+ota:
+  password: ""
+
+wifi:
+  ssid: "rumbledethumps"
+  password: !secret rumbledethumps_password
+
+  # Enable fallback hotspot (captive portal) in case wifi connection fails
+  ap:
+    ssid: "Test3 Fallback Hotspot"
+    password: "ytGbajMuzifO"
+
+captive_portal:
+
+switch:
+  - platform: gpio
+    pin:
+      number: D4
+      inverted: true
+    name: "test3 esp8266 LED"
+
+sensor:
+  - platform: ultrasonic
+    trigger_pin: D5
+    echo_pin: D1
+    update_interval: 10s
+    name: "test3 esp8266 ultrasonic sensor"
