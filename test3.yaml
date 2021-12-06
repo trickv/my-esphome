@@ -37,3 +37,4 @@ sensor:
     echo_pin: D1
     update_interval: 10s
     name: "test3 esp8266 ultrasonic sensor"
+    accuracy_decimals: 5
