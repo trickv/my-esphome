@@ -14,7 +14,6 @@ ota:
 
 wifi:
   ssid: "rumbledethumps"
-  password: "youneedatray"
   password: !secret rumbledethumps_password
 
   # Enable fallback hotspot (captive portal) in case wifi connection fails
