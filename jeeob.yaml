@@ -1,0 +1,75 @@
+esphome:
+  name: jeeob
+  platform: ESP8266
+  board: esp01_1m
+
+# Enable logging
+logger:
+
+# Enable Home Assistant API
+api:
+
+ota:
+  password: "69bd2447c456f60dfc00c13778097ac0"
+
+wifi:
+  ssid: "rumbledethumps"
+  password: !secret rumbledethumps_password
+
+  # Enable fallback hotspot (captive portal) in case wifi connection fails
+  ap:
+    ssid: "Socketb Fallback Hotspot"
+    password: "yVqTzOuqmArY"
+
+captive_portal:
+
+binary_sensor:
+  - platform: gpio
+    id: button
+    internal: true
+    pin:
+      number: 13
+      mode: INPUT
+      inverted: true
+    on_press:
+      - then:
+          - switch.toggle:
+              id: socket_relay
+    name: button
+
+switch:
+  - platform: gpio
+    name: Socket
+    id: socket_relay
+    pin:
+      number: 15
+      mode: OUTPUT
+      inverted: false
+    on_turn_on:
+      - then:
+          - light.turn_on:
+              id: status_led
+              state: true
+    on_turn_off:
+      - then:
+          - light.turn_off:
+              id: status_led
+              state: false
+    restore_mode: RESTORE_DEFAULT_OFF
+    interlock_wait_time: 0ms
+
+output:
+  - platform: gpio
+    id: led
+    pin:
+      number: 0
+      inverted: true
+      mode: OUTPUT
+
+light:
+  - platform: binary
+    name: Status LED
+    id: status_led
+    internal: true
+    output: led
+    restore_mode: RESTORE_DEFAULT_OFF
