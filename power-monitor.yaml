@@ -1,0 +1,56 @@
+esphome:
+  name: power-monitor
+  platform: ESP32
+  board: esp32dev
+
+# Enable logging
+logger:
+
+# Enable Home Assistant API
+api:
+
+ota:
+  password: "e35b0759bff15ebfe44cc60dc556c8b8"
+
+wifi:
+  ssid: "rumbledethumps"
+  password: !secret rumbledethumps_password
+
+  # Enable fallback hotspot (captive portal) in case wifi connection fails
+  ap:
+    ssid: "Power-Monitor Fallback Hotspot"
+    password: "lCC48LehktSA"
+
+captive_portal:
+
+switch:
+  - platform: gpio
+    pin:
+      number: GPIO2
+    name: "powermon LED"
+
+sensor:
+  - platform: wifi_signal
+    name: "powermon WiFi Signal Sensor"
+    update_interval: 60s
+    
+    # one sensor
+  - platform: ct_clamp
+    sensor: adc_sensor_d12
+    name: "D12 Measured Current"
+    update_interval: 60s
+
+  - platform: adc
+    pin: 32
+    id: adc_sensor_d12
+    
+    # and another
+  - platform: ct_clamp
+    sensor: adc_sensor_d13
+    name: "D13 Measured Current"
+    update_interval: 60s
+
+  # Example source sensor
+  - platform: adc
+    pin: 33
+    id: adc_sensor_d13
