@@ -1,0 +1,41 @@
+esphome:
+  name: esp46a646
+  platform: ESP8266
+  board: d1_mini
+
+wifi:
+  ssid: 'rumbledethumps'
+  password: 'youneedatray'
+  #use_address: 172.16.17.52
+
+# Enable logging
+logger:
+
+# Enable Home Assistant API
+api:
+
+ota:
+  password: "iaY3TO4hYeyMvp1jLpZYXfAjC003kxReGma8NH2DO0gCzZoGP1"
+
+sensor:
+  - platform: dht
+    pin: GPIO0
+    temperature:
+      name: "esp46a646 Temperature"
+    humidity:
+      name: "esp46a646 Humidity"
+    model: AM2302
+  - platform: wifi_signal
+    name: "WiFi Signal Sensor"
+    update_interval: 60s
+text_sensor:
+  - platform: wifi_info
+    ip_address:
+      name: ESP IP Address
+    mac_address:
+      name: ESP Mac Wifi Address
+
+switch:
+ - platform: gpio
+   pin: GPIO2
+   name: "LED"
