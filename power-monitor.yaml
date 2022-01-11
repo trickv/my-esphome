@@ -1,7 +1,9 @@
 esphome:
   name: power-monitor
   platform: ESP32
-  board: esp32dev
+  # Board is an ESP32 DevKit v1 looks identical to the 36-pin version of this:
+  # https://randomnerdtutorials.com/getting-started-with-esp32/
+  board: esp32doit-devkit-v1
 
 # Enable logging
 logger:
@@ -36,21 +38,21 @@ sensor:
     
     # one sensor
   - platform: ct_clamp
-    sensor: adc_sensor_d12
-    name: "D12 Measured Current"
+    sensor: adc_sensor_gpio34
+    name: "D34 Measured Current"
     update_interval: 60s
 
   - platform: adc
-    pin: 32
-    id: adc_sensor_d12
+    pin: GPIO34
+    id: adc_sensor_gpio34
     
     # and another
   - platform: ct_clamp
-    sensor: adc_sensor_d13
-    name: "D13 Measured Current"
+    sensor: adc_sensor_gpio35
+    name: "D35 Measured Current"
     update_interval: 60s
 
   # Example source sensor
   - platform: adc
-    pin: 33
-    id: adc_sensor_d13
+    pin: GPIO35
+    id: adc_sensor_gpio35
