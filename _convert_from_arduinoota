@@ -1,0 +1,14 @@
+# compile with 1.20.0:
+docker run --rm --net=host -v "${PWD}":/config -it esphome/esphome:1.20.0 compile esp67d256old.yaml
+# then modify the json:
+file: .esphome/esp67d256old.yaml.json
+add "use_legacy_ota": true to top of json.
+# upload with 1.11.1:
+docker run --rm --net=host -v "${PWD}":/config -it esphome/esphome:1.11.1  esp67d256old.yaml upload
+# it hangs...unplug, replug, and upload again with 1.11.1
+# (same)
+# check if mDNS name is working...if it is...esphome is up!
+now upgrade to latest:
+docker run --rm --net=host -v "${PWD}":/config -it esphome/esphome:2021.12.1 compile esp67d256old.yaml
+docker run --rm --net=host -v "${PWD}":/config -it esphome/esphome:2021.12.1 upload esp67d256old.yaml
+
