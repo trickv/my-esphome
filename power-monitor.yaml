@@ -25,34 +25,40 @@ wifi:
 
 captive_portal:
 
-switch:
-  - platform: gpio
-    pin:
-      number: GPIO2
-    name: "powermon LED"
+#switch:
+#  - platform: gpio
+#    pin:
+#      number: GPIO2
+#    name: "powermon LED"
 
 sensor:
-  - platform: wifi_signal
-    name: "powermon WiFi Signal Sensor"
-    update_interval: 60s
-    
     # one sensor
   - platform: ct_clamp
     sensor: adc_sensor_gpio34
     name: "D34 Measured Current"
-    update_interval: 60s
+    update_interval: 10s
+    sample_duration: 167ms
 
   - platform: adc
     pin: GPIO34
     id: adc_sensor_gpio34
+    name: "GPIO34 voltage"
+    update_interval: 10s
+    attenuation: auto
     
     # and another
   - platform: ct_clamp
     sensor: adc_sensor_gpio35
     name: "D35 Measured Current"
-    update_interval: 60s
-
-  # Example source sensor
+    update_interval: 10s
+    sample_duration: 167ms
+    
   - platform: adc
     pin: GPIO35
     id: adc_sensor_gpio35
+    name: "GPIO35 voltage"
+    update_interval: 10s
+    attenuation: auto
+
+time:
+  - platform: sntp
