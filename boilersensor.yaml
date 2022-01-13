@@ -1,0 +1,53 @@
+esphome:
+  name: boilersensor
+
+esp8266:
+  board: esp01_1m
+
+# Enable logging
+logger:
+
+# Enable Home Assistant API
+api:
+
+ota:
+  password: "iaY3TO4hYeyMvp1jLpZYXfAjC003kxReGma8NH2DO0gCzZoGP1"
+
+wifi:
+  ssid: !secret wifi_ssid
+  password: !secret wifi_password
+
+  # Enable fallback hotspot (captive portal) in case wifi connection fails
+  ap:
+    ssid: "Boilersensor Fallback Hotspot"
+    password: "VpL0y8o1ChlT"
+
+captive_portal:
+
+sensor:
+  - platform: wifi_signal
+    name: "WiFi Signal Sensor"
+    update_interval: 60s
+  - platform: dallas
+    address: 0x5D0301A279FB3428
+    name: "Boiler Hot Supply"
+  - platform: dallas
+    address: 0x1B000004BAAC9628
+    name: "Boiler Cool Return West"
+  - platform: dallas
+    address: 0x060300A27927EB28
+    name: "Boiler Cool Return East"
+
+text_sensor:
+  - platform: wifi_info
+    ip_address:
+      name: ESP IP Address
+    mac_address:
+      name: ESP Mac Wifi Address
+
+dallas:
+  - pin: GPIO2
+  
+#[03:07:57][D][dallas.sensor:081]:     0x5D0301A279FB3428 # hot supply # id=\"2834fb79a201035d\
+#[03:07:57][D][dallas.sensor:081]:     0x1B000004BAAC9628 # east # id=\"28eb2779a2000306\"
+#[03:07:57][D][dallas.sensor:081]:     0x060300A27927EB28 # west # id=\"2896acba0400001b\"
