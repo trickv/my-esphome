@@ -25,11 +25,11 @@ wifi:
 
 captive_portal:
 
-#switch:
-#  - platform: gpio
-#    pin:
-#      number: GPIO2
-#    name: "powermon LED"
+switch:
+  - platform: gpio
+    pin:
+      number: GPIO2
+    name: "powermon LED"
 
 sensor:
     # one sensor
@@ -37,7 +37,13 @@ sensor:
     sensor: adc_sensor_gpio34
     name: "D34 Measured Current"
     update_interval: 10s
-    sample_duration: 167ms
+    #sample_duration: 167ms
+    id: ct_clamp_gpio34
+    accuracy_decimals: 5
+    filters:
+      - calibrate_linear:
+          - 0.00284 -> 0.03745
+          - 0.007 -> 0.692
 
   - platform: adc
     pin: GPIO34
@@ -52,6 +58,8 @@ sensor:
     name: "D35 Measured Current"
     update_interval: 10s
     sample_duration: 167ms
+    id: ct_clamp_gpio35
+    accuracy_decimals: 5
     
   - platform: adc
     pin: GPIO35
@@ -60,5 +68,56 @@ sensor:
     update_interval: 10s
     attenuation: auto
 
+  - platform: template
+    name: "Template Voltage"
+    lambda: |-
+      return 120.0;
+    update_interval: 10s
+    id: template_voltage
+    unit_of_measurement: "V"
+    icon: mdi:sine-wave
+
+  - platform: template
+    name: "Template Power D34"
+    lambda: |-
+      return (id(template_voltage).state * id(ct_clamp_gpio34).state);
+    update_interval: 10s
+    id: power_d34
+    unit_of_measurement: "W"
+    icon: mdi:lightning-bolt-outline
+
+  - platform: template
+    name: "Template Power D35"
+    lambda: |-
+      return (id(template_voltage).state * id(ct_clamp_gpio35).state);
+    update_interval: 10s
+    id: power_d35
+    unit_of_measurement: "W"
+    icon: mdi:lightning-bolt-outline
+
+  - platform: template
+    name: "Template Power SUM"
+    lambda: |-
+      return (id(power_d34).state + id(power_d35).state);
+    update_interval: 10s
+    id: template_power_sum
+    unit_of_measurement: "W"
+    icon: mdi:lightning-bolt-outline
+    
+    #power:
+    #  id: my_power
+  - platform: total_daily_energy
+    name: "Total Daily Energy"
+    power_id: template_power_sum
+    icon: mdi:lightning-bolt
+
+#text_sensor:
+#  - platform: template
+#    name: "Time"
+#    lambda: |-
+#      return id(homeassistant_time).now().strftime("%c");
+
 time:
-  - platform: sntp
+  - platform: homeassistant
+    id: homeassistant_time
+    timezone: "America/Chicago"
