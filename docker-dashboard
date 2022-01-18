@@ -1,2 +1,2 @@
 # https://hub.docker.com/r/esphome/esphome/tags
-docker run --rm --net=host -v "${PWD}":/config -it esphome/esphome:2021.12.1
+./esphome
