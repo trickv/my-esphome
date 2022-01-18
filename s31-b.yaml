@@ -1,5 +1,5 @@
 esphome:
-  name: s31
+  name: s31-b
 
 esp8266:
   board: esp01_1m
@@ -12,7 +12,7 @@ logger:
 api:
 
 ota:
-  password: "e293995bb5a0ef2b16b926c88671cebc"
+  password: "1832cc362bee72fa1aa3a217b96b6ce0"
 
 wifi:
   ssid: !secret wifi_ssid
@@ -20,7 +20,7 @@ wifi:
 
   # Enable fallback hotspot (captive portal) in case wifi connection fails
   ap:
-    ssid: "S31 Fallback Hotspot"
+    ssid: "S31-B Fallback Hotspot"
     password: "9cRLcjwQDm9D"
 
 captive_portal:
@@ -35,35 +35,35 @@ binary_sensor:
       number: GPIO0
       mode: INPUT_PULLUP
       inverted: True
-    name: "Sonoff S31 Button"
+    name: "S31-B Button"
     on_press:
       - switch.toggle: relay
   - platform: status
-    name: "Sonoff S31 Status"
+    name: "S31-B Status"
 
 sensor:
   - platform: wifi_signal
-    name: "Sonoff S31 WiFi Signal"
+    name: "S31-B WiFi Signal"
     update_interval: 60s
   - platform: cse7766
     current:
-      name: "Sonoff S31 Current"
+      name: "S31-B Current"
       accuracy_decimals: 3
     voltage:
-      name: "Sonoff S31 Voltage"
+      name: "S31-B Voltage"
       accuracy_decimals: 1
     power:
-      name: "Sonoff S31 Power"
+      name: "S31-B Power"
       accuracy_decimals: 1
       id: power
   - platform: total_daily_energy
-    name: "Total Daily Energy"
+    name: "S31-B Total Daily Energy"
     power_id: power
     icon: mdi:lightning-bolt
     
 switch:
   - platform: gpio
-    name: "Sonoff S31 Relay"
+    name: "S31-B Relay"
     pin: GPIO12
     id: relay
 
