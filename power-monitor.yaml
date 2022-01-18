@@ -42,7 +42,7 @@ sensor:
     accuracy_decimals: 5
     filters:
       - calibrate_linear:
-          - 0.00284 -> 0.03745
+          - 0.00284 -> 0
           - 0.007 -> 0.692
 
   - platform: adc
@@ -60,6 +60,10 @@ sensor:
     sample_duration: 167ms
     id: ct_clamp_gpio35
     accuracy_decimals: 5
+    filters:
+      - calibrate_linear:
+          - 0.002928 -> 0
+          - 0.008817 -> 0.689101
     
   - platform: adc
     pin: GPIO35
