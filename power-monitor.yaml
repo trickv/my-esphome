@@ -37,7 +37,7 @@ sensor:
     sensor: adc_sensor_gpio34
     name: "D34 Measured Current"
     update_interval: 10s
-    #sample_duration: 167ms
+    sample_duration: 500ms
     id: ct_clamp_gpio34
     accuracy_decimals: 5
     filters:
@@ -58,7 +58,7 @@ sensor:
     sensor: adc_sensor_gpio35
     name: "D35 Measured Current"
     update_interval: 10s
-    sample_duration: 167ms
+    sample_duration: 500ms
     id: ct_clamp_gpio35
     accuracy_decimals: 5
     filters:
