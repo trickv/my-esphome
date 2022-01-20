@@ -38,3 +38,13 @@ sensor:
     update_interval: 10s
     name: "test3 esp8266 ultrasonic sensor"
     accuracy_decimals: 5
+    id: ultrasonic_sensor
+  - platform: template
+    lambda: |-
+      return id(ultrasonic_sensor).state;
+    filters:
+      calibrate_linear:
+        - 0.28 -> 0
+        - 0.185 -> 100
+    unit_of_measurement: "%"
+    name: "% Full"
