@@ -1,9 +1,1 @@
-if [ -e /dev/ttyUSB0 ]; then
-    echo "Attaching /dev/ttyUSB0..."
-    device="--device=/dev/ttyUSB0"
-else
-    device=""
-fi
-
-docker run --rm --net=host $device -v "${PWD}":/config -it esphome/esphome:2021.12.3 $*
-
+docker run --rm --net=host -v "${PWD}":/config -it esphome/esphome:2021.12.3 $*
