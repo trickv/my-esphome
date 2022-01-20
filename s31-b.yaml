@@ -46,6 +46,7 @@ sensor:
     name: "S31-B WiFi Signal"
     update_interval: 60s
   - platform: cse7766
+    update_interval: 10s
     current:
       name: "S31-B Current"
       accuracy_decimals: 3
