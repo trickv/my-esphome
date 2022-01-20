@@ -42,10 +42,13 @@ sensor:
     accuracy_decimals: 5
     filters:
       - calibrate_linear:
-          - 0.00291 -> 0
-          - 0.00715 -> 0.71161
-#          - 0.007 -> 0.692
-
+# These calibration readings are based on the basement chest freezer. Not terribly accurate when scaled up. Done 17th-18th of Jan 2022.
+           - 0.00612 -> 0 # the zero point
+#          - 0.00715 -> 0.71161 # chest freezer on for ~15 mins
+# calibration on microwave with ~4 cups of water. about 14.8A on the genie meter but a bit more on the S31. Trusting the S31.
+           - 0.16222 -> 15.13783
+# calibration on kettle, ~12A
+           - 0.12957 -> 12.08479
   - platform: adc
     pin: GPIO34
     id: adc_sensor_gpio34
@@ -63,8 +66,20 @@ sensor:
     accuracy_decimals: 5
     filters:
       - calibrate_linear:
-          - 0.002928 -> 0
-          - 0.008817 -> 0.689101
+# These calibration readings are based on the basement chest freezer. Not terribly accurate when scaled up. Done 17th-18th of Jan 2022.
+           - 0.00540 -> 0 # zero point
+#          - 0.008817 -> 0.689101 # chest freezer on for ~15 minutes
+# calibration on microwave with ~4 cups of water vs the S31-A.
+#           - 0.18208 -> 14.89117
+# calibration using kettle, ~12A
+#          - 0.18260 -> 12.11394
+# now that i fixed polarity problem on D34 which seemed to cause D35 to be wonky:
+# calibration of kettle 12A
+           - 0.13035 -> 11.93600
+# toaster 12A
+           - 0.13467 -> 12.24786
+# microwave 15A
+           - 0.16145 -> 14.70408
     
   - platform: adc
     pin: GPIO35
