@@ -44,7 +44,7 @@ sensor:
       return id(ultrasonic_sensor).state;
     filters:
       calibrate_linear:
-        - 0.28 -> 0
+        - 0.23 -> 0
         - 0.185 -> 100
     unit_of_measurement: "%"
     name: "% Full"
