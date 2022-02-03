@@ -99,6 +99,14 @@ sensor:
     unit_of_measurement: "V"
     icon: mdi:sine-wave
 
+  - platform: homeassistant
+    name: "S31-A Voltage L1 Yellow (from HA)"
+    entity_id: sensor.sonoff_s31_a_voltage
+
+  - platform: homeassistant
+    name: "S31-B Voltage L2 Red (from HA)"
+    entity_id: sensor.sonoff_s31_b_voltage
+
   - platform: template
     name: "Template Power D34"
     lambda: |-
