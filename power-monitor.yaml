@@ -55,6 +55,7 @@ sensor:
     name: "GPIO34 voltage"
     update_interval: 10s
     attenuation: auto
+    entity_category: "diagnostic"
     
     # and another
   - platform: ct_clamp
@@ -87,6 +88,7 @@ sensor:
     name: "GPIO35 voltage"
     update_interval: 10s
     attenuation: auto
+    entity_category: "diagnostic"
 
   - platform: template
     name: "Template Voltage"
