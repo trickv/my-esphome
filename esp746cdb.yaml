@@ -25,14 +25,14 @@ sensor:
       name: "esp746cdb Humidity"
     model: AM2302
   - platform: wifi_signal
-    name: "WiFi Signal Sensor"
+    name: "WiFi Signal"
     update_interval: 60s
 text_sensor:
   - platform: wifi_info
     ip_address:
       name: ESP IP Address
     mac_address:
-      name: ESP Mac Wifi Address
+      name: ESP MAC Address
 
 switch:
  - platform: gpio
