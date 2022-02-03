@@ -40,3 +40,8 @@ switch:
      number: GPIO2
      inverted: true
    name: "LED"
+ - platform: gpio
+   pin:
+     number: D5
+     #inverted: true
+   name: "Relay"
