@@ -15,7 +15,7 @@ logger:
 api:
 
 ota:
-  password: "iaY3TO4hYeyMvp1jLpZYXfAjC003kxReGma8NH2DO0gCzZoGP1"
+  password: !secret ota_password_old_arduinoota
 
 sensor:
   - platform: dht
