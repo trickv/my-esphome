@@ -43,5 +43,8 @@ switch:
  - platform: gpio
    pin:
      number: D5
-     #inverted: true
-   name: "Relay"
+   name: "Garage Door"
+   id: garage_door_opener_relay
+   on_turn_on:
+     - delay: 500ms
+     - switch.turn_off: garage_door_opener_relay
