@@ -28,6 +28,10 @@ captive_portal:
 
 
 sensor:
+  - platform: adc
+    pin: A0
+    name: "Capacitive Soil Moisture Sensor"
+    update_interval: 60s
   - platform: wifi_signal
     name: "WiFi Signal"
     update_interval: 60s
