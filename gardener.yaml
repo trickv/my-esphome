@@ -1,0 +1,25 @@
+esphome:
+  name: gardener
+
+esp8266:
+  board: d1_mini
+
+# Enable logging
+logger:
+
+# Enable Home Assistant API
+api:
+
+ota:
+  password: !secret ota_password
+
+wifi:
+  ssid: !secret wifi_ssid
+  password: !secret wifi_password
+
+  # Enable fallback hotspot (captive portal) in case wifi connection fails
+  ap:
+    ssid: "Gardener Fallback Hotspot"
+    password: !secret wifi_fallback_hotspot_password
+
+captive_portal:
