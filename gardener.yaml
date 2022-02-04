@@ -32,6 +32,16 @@ sensor:
     pin: A0
     name: "Capacitive Soil Moisture Sensor"
     update_interval: 60s
+    id: capacitive_soil_moisture_sensor
+  - platform: template
+    lambda: |-
+      return id(capacitive_soil_moisture_sensor).state;
+    filters:
+      calibrate_linear:
+        - 0.65 -> 0
+        - 0.25 -> 100
+    unit_of_measurement: "%"
+    name: "% Wet"
   - platform: wifi_signal
     name: "WiFi Signal"
     update_interval: 60s
