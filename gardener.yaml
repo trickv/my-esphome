@@ -9,6 +9,8 @@ logger:
 
 # Enable Home Assistant API
 api:
+  encryption:
+    key: !secret encryption_psk
 
 ota:
   password: !secret ota_password
@@ -23,3 +25,27 @@ wifi:
     password: !secret wifi_fallback_hotspot_password
 
 captive_portal:
+
+
+sensor:
+  - platform: wifi_signal
+    name: "WiFi Signal"
+    update_interval: 60s
+text_sensor:
+  - platform: wifi_info
+    ip_address:
+      name: ESP IP Address
+    mac_address:
+      name: ESP MAC Address
+
+switch:
+  - platform: gpio
+    pin:
+      number: GPIO2
+      inverted: true
+    name: "LED"
+    entity_category: "diagnostic"
+  - platform: gpio
+    pin:
+      number: D5
+    name: "Valve"
