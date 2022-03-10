@@ -30,6 +30,17 @@ switch:
       inverted: true
     name: "esp cam1 LED"
 
+button:
+  - platform: restart
+    name: "esp32-cam1 restart"
+
+sensor:
+  - platform: wifi_signal
+    name: "WiFi Signal Sensor"
+    update_interval: 60s
+  - platform: uptime
+    name: Uptime Sensor
+
 esp32_camera:
   external_clock:
     pin: GPIO0
@@ -42,6 +53,9 @@ esp32_camera:
   href_pin: GPIO23
   pixel_clock_pin: GPIO22
   power_down_pin: GPIO32
-
-  # Image settings
+  max_framerate: 1fps
+  idle_framerate: 1fps
+  vertical_flip: false
+  horizontal_mirror: false
+  test_pattern: false
   name: My Camera
