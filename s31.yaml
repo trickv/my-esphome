@@ -1,3 +1,6 @@
+substitutions:
+  ui_name: S31-A
+
 esphome:
   name: s31
 
@@ -20,7 +23,7 @@ wifi:
 
   # Enable fallback hotspot (captive portal) in case wifi connection fails
   ap:
-    ssid: "S31 Fallback Hotspot"
+    ssid: "${ui_name} Fallback Hotspot"
     password: "9cRLcjwQDm9D"
 
 captive_portal:
@@ -39,34 +42,34 @@ binary_sensor:
     on_press:
       - switch.toggle: relay
   - platform: status
-    name: "Sonoff S31 Status"
+    name: "${ui_name} Status"
 
 sensor:
   - platform: wifi_signal
-    name: "Sonoff S31 WiFi Signal"
+    name: "${ui_name} WiFi Signal"
     update_interval: 60s
   - platform: cse7766
     update_interval: 10s
     current:
-      name: "Sonoff S31 Current"
+      name: "${ui_name} Current"
       accuracy_decimals: 3
     voltage:
-      name: "Sonoff S31 Voltage"
+      name: "${ui_name} Voltage"
       accuracy_decimals: 1
     power:
-      name: "Sonoff S31 Power"
+      name: "${ui_name} Power"
       accuracy_decimals: 1
       id: power
     energy:
-      name: "S31-A Energy"
+      name: "${ui_name} Energy"
   - platform: total_daily_energy
-    name: "Total Daily Energy"
+    name: "${ui_name} Total Daily Energy"
     power_id: power
     icon: mdi:lightning-bolt
     
 switch:
   - platform: gpio
-    name: "Sonoff S31 Relay"
+    name: "${ui_name} Relay"
     pin: GPIO12
     id: relay
 
