@@ -6,6 +6,7 @@ esphome:
 
 esp8266:
   board: esp01_1m
+  restore_from_flash: true
 
 # Enable logging
 logger:
@@ -72,6 +73,7 @@ switch:
     name: "${ui_name} Relay"
     pin: GPIO12
     id: relay
+    restore_mode: RESTORE_DEFAULT_ON
 
 status_led:
   pin: GPIO13
