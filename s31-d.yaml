@@ -35,7 +35,7 @@ binary_sensor:
       number: GPIO0
       mode: INPUT_PULLUP
       inverted: True
-    name: "S31-D Button"
+    id: button
     on_press:
       - switch.toggle: relay
   - platform: status
@@ -57,6 +57,8 @@ sensor:
       name: "S31-D Power"
       accuracy_decimals: 1
       id: power
+    energy:
+      name: "S31-D Energy"
   - platform: total_daily_energy
     name: "S31-D Total Daily Energy"
     power_id: power
