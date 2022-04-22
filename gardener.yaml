@@ -1,5 +1,8 @@
-esphome:
+substitutions:
   name: gardener
+
+esphome:
+  name: $name
 
 esp8266:
   board: d1_mini
@@ -45,6 +48,8 @@ sensor:
   - platform: wifi_signal
     name: "WiFi Signal"
     update_interval: 60s
+  - platform: uptime
+    name: Uptime Sensor
 text_sensor:
   - platform: wifi_info
     ip_address:
@@ -63,3 +68,7 @@ switch:
     pin:
       number: D5
     name: "Valve"
+
+button:
+  - platform: restart
+    name: "$name restart"
