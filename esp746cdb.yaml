@@ -31,6 +31,7 @@ sensor:
     trigger_pin: D8
     echo_pin: D7
     name: "Ultrasonic Sensor"
+    timeout: 3.0m
 
 text_sensor:
   - platform: wifi_info
