@@ -27,6 +27,11 @@ sensor:
   - platform: wifi_signal
     name: "WiFi Signal"
     update_interval: 60s
+  - platform: ultrasonic
+    trigger_pin: D8
+    echo_pin: D7
+    name: "Ultrasonic Sensor"
+
 text_sensor:
   - platform: wifi_info
     ip_address:
