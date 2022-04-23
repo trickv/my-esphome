@@ -1,5 +1,8 @@
-esphome:
+substitutions:
   name: esp746cdb
+
+esphome:
+  name: $name
   platform: ESP8266
   board: d1_mini
 
@@ -20,14 +23,15 @@ sensor:
   - platform: dht
     pin: D3
     temperature:
-      name: "esp746cdb Temperature"
+      name: "$name Temperature"
     humidity:
-      name: "esp746cdb Humidity"
+      name: "$name Humidity"
     model: AM2302
   - platform: wifi_signal
     name: "WiFi Signal"
     update_interval: 60s
   - platform: ultrasonic
+    id: esp746cdb_ultrasonic
     trigger_pin: D8
     echo_pin: D7
     name: "Ultrasonic Sensor"
@@ -39,6 +43,18 @@ text_sensor:
       name: ESP IP Address
     mac_address:
       name: ESP MAC Address
+  - platform: template
+    name: "$name Garage Status"
+    lambda: |-
+      float val;
+      val = id(esp746cdb_ultrasonic).state;
+      if (val > 2)
+          return std::string("Door closed, Empty");
+      if (val < 0.2)
+          return std::string("Door open");
+      if (val > 0.5 && val < 0.9)
+          return std::string("Door closed, Car In");
+      return std::string("Unknown status");
 
 switch:
  - platform: gpio
