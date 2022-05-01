@@ -52,7 +52,7 @@ text_sensor:
           return std::string("Door closed, Empty");
       if (val < 0.2)
           return std::string("Door open");
-      if (val > 0.5 && val < 0.9)
+      if (val > 0.5 && val < 1.0)
           return std::string("Door closed, Car In");
       return std::string("Unknown status");
 
