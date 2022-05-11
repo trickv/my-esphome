@@ -98,21 +98,67 @@ sensor:
     id: template_voltage
     unit_of_measurement: "V"
     icon: mdi:sine-wave
+    entity_category: "diagnostic"
 
   - platform: homeassistant
-    name: "S31-A Voltage L1 Yellow (from HA)"
-    entity_id: sensor.sonoff_s31_a_voltage
+    name: "S31-C Voltage L2 Red"
+    entity_id: sensor.s31_c_voltage
+    id: powermon_l2_voltage
 
   - platform: homeassistant
-    name: "S31-B Voltage L2 Red (from HA)"
-    entity_id: sensor.sonoff_s31_b_voltage
+    name: "S31-D Voltage L1 Yellow"
+    entity_id: sensor.s31_d_voltage
+    id: powermon_l1_voltage
+
+  - platform: template
+    name: "L1 voltage import from HASS"
+    entity_category: "diagnostic"
+    unit_of_measurement: "V"
+    icon: mdi:sine-wave
+    lambda: |-
+      return (id(powermon_l1_voltage).state);
+  
+  - platform: template
+    name: "L2 voltage import from HASS"
+    entity_category: "diagnostic"
+    unit_of_measurement: "V"
+    icon: mdi:sine-wave
+    lambda: |-
+      return (id(powermon_l2_voltage).state);
+
+  - platform: template
+    name: "Power L2 Red D34"
+    lambda: |-
+      return (id(powermon_l2_voltage).state * id(ct_clamp_gpio34).state);
+    update_interval: 1s
+    id: power_d34
+    unit_of_measurement: "W"
+    icon: mdi:lightning-bolt-outline
+  
+  - platform: template
+    name: "Power L1 Yellow D35"
+    lambda: |-
+      return (id(powermon_l1_voltage).state * id(ct_clamp_gpio35).state);
+    update_interval: 1s
+    id: power_d35
+    unit_of_measurement: "W"
+    icon: mdi:lightning-bolt-outline
+
+  - platform: template
+    name: "Power"
+    lambda: |-
+      return (id(power_d34).state + id(power_d35).state);
+    update_interval: 1s
+    id: power
+    unit_of_measurement: "W"
+    icon: mdi:lightning-bolt-outline
 
   - platform: template
     name: "Template Power D34"
     lambda: |-
       return (id(template_voltage).state * id(ct_clamp_gpio34).state);
-    update_interval: 10s
-    id: power_d34
+    update_interval: 1s
+    id: template_power_d34
     unit_of_measurement: "W"
     icon: mdi:lightning-bolt-outline
 
@@ -120,16 +166,16 @@ sensor:
     name: "Template Power D35"
     lambda: |-
       return (id(template_voltage).state * id(ct_clamp_gpio35).state);
-    update_interval: 10s
-    id: power_d35
+    update_interval: 1s
+    id: template_power_d35
     unit_of_measurement: "W"
     icon: mdi:lightning-bolt-outline
 
   - platform: template
     name: "Template Power SUM"
     lambda: |-
-      return (id(power_d34).state + id(power_d35).state);
-    update_interval: 10s
+      return (id(template_power_d34).state + id(template_power_d35).state);
+    update_interval: 1s
     id: template_power_sum
     unit_of_measurement: "W"
     icon: mdi:lightning-bolt-outline
@@ -139,6 +185,11 @@ sensor:
   - platform: total_daily_energy
     name: "Total Daily Energy"
     power_id: template_power_sum
+    icon: mdi:lightning-bolt
+  
+  - platform: total_daily_energy
+    name: "Total Daily Energy REAL"
+    power_id: power
     icon: mdi:lightning-bolt
 
 #text_sensor:
