@@ -35,6 +35,7 @@ sensor:
     trigger_pin: D3
     echo_pin: D4
     name: "Rain Barrel Level"
+    accuracy_decimals: 5
   - platform: adc
     pin: A0
     name: "Capacitive Soil Moisture Sensor"
