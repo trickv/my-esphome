@@ -6,6 +6,7 @@ esp8266:
 
 # Enable logging
 logger:
+  level: DEBUG
 
 # Enable Home Assistant API
 api:
@@ -26,14 +27,26 @@ captive_portal:
 
 switch:
   - platform: gpio
-    name: D2
+    name: East
+    id: boiler_control_east
     pin:
       number: D2
       mode: OUTPUT
       inverted: true
   - platform: gpio
-    name: D7
+    name: West
+    id: boiler_control_west
     pin:
       number: D7
       mode: OUTPUT
       inverted: true
+
+sensor:
+  - platform: dallas
+    address: 0xd90000052d382e28
+    name: "West encap sensor"
+    id: boiler_control_west_sensor
+
+
+dallas:
+  - pin: D5
