@@ -54,3 +54,28 @@ sensor:
 
 dallas:
   - pin: D5
+
+climate:
+  - platform: thermostat
+    name: "East (esp)"
+    sensor: boiler_control_east_sensor
+    default_target_temperature_low: 67 °F
+    min_heating_off_time: 60s
+    min_heating_run_time: 60s
+    min_idle_time: 30s
+    heat_action:
+      - switch.turn_on: boiler_control_east
+    idle_action:
+      - switch.turn_off: boiler_control_east
+  - platform: thermostat
+    name: "West (esp)"
+    sensor: boiler_control_west_sensor
+    default_target_temperature_low: 67 °F
+    min_heating_off_time: 60s
+    min_heating_run_time: 60s
+    min_idle_time: 30s
+    heat_action:
+      - switch.turn_on: boiler_control_west
+    idle_action:
+      - switch.turn_off: boiler_control_west
+
