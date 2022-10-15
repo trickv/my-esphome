@@ -46,6 +46,10 @@ sensor:
     address: 0xd90000052d382e28
     name: "West encap sensor"
     id: boiler_control_west_sensor
+  - platform: dallas
+    address: 0xd20000052d567728
+    name: "East encap sensor"
+    id: boiler_control_east_sensor
 
 
 dallas:
