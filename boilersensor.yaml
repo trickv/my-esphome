@@ -29,9 +29,9 @@ sensor:
   - platform: wifi_signal
     name: "WiFi Signal Sensor"
     update_interval: 60s
-  - platform: dallas
-    address: 0x5D0301A279FB3428
-    name: "Boiler Hot Supply"
+#  - platform: dallas
+#    address: 0x5D0301A279FB3428
+#    name: "Boiler Hot Supply"
   - platform: dallas
     address: 0x1B000004BAAC9628
     name: "Boiler Cool Return West"
