@@ -59,7 +59,14 @@ climate:
   - platform: thermostat
     name: "East (esp)"
     sensor: boiler_control_east_sensor
-    default_target_temperature_low: 67 °F
+    default_preset: Home
+    preset:
+      - name: Home
+        default_target_temperature_low: 67 °F
+      - name: Away
+        default_target_temperature_low: 60 °F
+      - name: Vacation
+        default_target_temperature_low: 55 °F
     min_heating_off_time: 60s
     min_heating_run_time: 60s
     min_idle_time: 30s
@@ -70,7 +77,14 @@ climate:
   - platform: thermostat
     name: "West (esp)"
     sensor: boiler_control_west_sensor
-    default_target_temperature_low: 67 °F
+    default_preset: Home
+    preset:
+      - name: Home
+        default_target_temperature_low: 67 °F
+      - name: Away
+        default_target_temperature_low: 60 °F
+      - name: Vacation
+        default_target_temperature_low: 55 °F
     min_heating_off_time: 60s
     min_heating_run_time: 60s
     min_idle_time: 30s
