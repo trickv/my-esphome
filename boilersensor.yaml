@@ -25,6 +25,11 @@ wifi:
 
 captive_portal:
 
+#[03:40:06][D][dallas.sensor:084]:     0x1b000004baac9628
+#[03:40:06][D][dallas.sensor:084]:     0x630121144ed00328
+#[03:40:06][D][dallas.sensor:084]:     0x5a0121142bddd328
+#[03:40:06][D][dallas.sensor:084]:     0x060300a27927eb28
+
 sensor:
   - platform: wifi_signal
     name: "WiFi Signal Sensor"
@@ -38,6 +43,12 @@ sensor:
   - platform: dallas
     address: 0x060300A27927EB28
     name: "Boiler Cool Return East"
+  - platform: dallas
+    address: 0x5a0121142bddd328
+    name: "Boiler Hot Supply"
+  - platform: dallas
+    address: 0x630121144ed00328
+    name: "Boiler Hot Exit"
 
 text_sensor:
   - platform: wifi_info
