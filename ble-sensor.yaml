@@ -1,0 +1,30 @@
+esphome:
+  name: ble-sensor
+
+esp32:
+  board: esp32dev
+  framework:
+    type: arduino
+
+# Enable logging
+logger:
+
+# Enable Home Assistant API
+api:
+  encryption:
+    key: "GVCmRtvFktFbg6cwfvuOWVFyT0JD01BF+HWhRBZ/zEs="
+
+ota:
+  password: "ee95be1c8525ab5f2e5ed4501b5b558a"
+
+wifi:
+  ssid: !secret wifi_ssid
+  password: !secret wifi_password
+
+  # Enable fallback hotspot (captive portal) in case wifi connection fails
+  ap:
+    ssid: "Ble-Sensor Fallback Hotspot"
+    password: "2vA41MEFIhfw"
+
+captive_portal:
+    
