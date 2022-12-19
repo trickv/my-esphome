@@ -62,11 +62,11 @@ climate:
     default_preset: Home
     preset:
       - name: Home
-        default_target_temperature_low: 67 °F
+        default_target_temperature_low: 68 °F
       - name: Away
         default_target_temperature_low: 60 °F
       - name: Vacation
-        default_target_temperature_low: 55 °F
+        default_target_temperature_low: 50 °F
     min_heating_off_time: 60s
     min_heating_run_time: 60s
     min_idle_time: 30s
@@ -80,11 +80,11 @@ climate:
     default_preset: Home
     preset:
       - name: Home
-        default_target_temperature_low: 67 °F
+        default_target_temperature_low: 68 °F
       - name: Away
         default_target_temperature_low: 60 °F
       - name: Vacation
-        default_target_temperature_low: 55 °F
+        default_target_temperature_low: 50 °F
     min_heating_off_time: 60s
     min_heating_run_time: 60s
     min_idle_time: 30s
