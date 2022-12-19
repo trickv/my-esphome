@@ -1,0 +1,1 @@
+./esphome-usb logs --device /dev/ttyUSB0 ble-sensor.yaml
