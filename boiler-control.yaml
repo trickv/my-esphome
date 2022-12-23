@@ -69,8 +69,8 @@ climate:
     min_heating_off_time: 60s
     min_heating_run_time: 60s
     min_idle_time: 30s
-    heat_deadband: 0.5 °F
-    heat_overrun: 0.5 °F
+    heat_deadband: 0.3 °C
+    heat_overrun: 0.3 °C
     heat_action:
       - switch.turn_on: boiler_control_east
     idle_action:
@@ -89,8 +89,8 @@ climate:
     min_heating_off_time: 60s
     min_heating_run_time: 60s
     min_idle_time: 30s
-    heat_deadband: 0.5 °F
-    heat_overrun: 0.5 °F
+    heat_deadband: 0.3 °C
+    heat_overrun: 0.3 °C
     heat_action:
       - switch.turn_on: boiler_control_west
     idle_action:
