@@ -1,1 +1,1 @@
-docker run --rm --net=host -v "${PWD}":/config -it esphome/esphome:2022.12.3 $*
+docker run --rm --net=host -v "${PWD}":/config -it esphome/esphome:2022.12.8 $*
