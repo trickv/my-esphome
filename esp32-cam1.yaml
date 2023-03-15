@@ -23,13 +23,6 @@ wifi:
 
 captive_portal:
 
-switch:
-  - platform: gpio
-    pin:
-      number: GPIO2
-      inverted: true
-    name: "esp cam1 LED"
-
 button:
   - platform: restart
     name: "esp32-cam1 restart"
@@ -58,4 +51,4 @@ esp32_camera:
   vertical_flip: false
   horizontal_mirror: false
   test_pattern: false
-  name: My Camera
+  name: esp32-cam1
