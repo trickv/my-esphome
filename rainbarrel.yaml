@@ -29,7 +29,17 @@ sensor:
     trigger_pin: D3
     echo_pin: D4
     name: "Rain Barrel Level"
+    id: rain_barrel_level
     accuracy_decimals: 5
+  - platform: template
+    lambda: |-
+      return id(rain_barrel_level).state;
+    filters:
+      calibrate_linear:
+        - 0.25 -> 100
+        - 0.83 -> 0
+    unit_of_measurement: "%"
+    name: "Rain Barrel % Full"
   - platform: adc
     pin: A0
     name: "Capacitive Soil Moisture Sensor"
@@ -43,4 +53,4 @@ sensor:
         - 0.65 -> 0
         - 0.25 -> 100
     unit_of_measurement: "%"
-    name: "% Wet"
+    name: "Soil % Wet"
