@@ -36,8 +36,8 @@ sensor:
       return id(rain_barrel_level).state;
     filters:
       calibrate_linear:
-        - 0.25 -> 100
-        - 0.83 -> 0
+        - 0.07 -> 100
+        - 0.80 -> 0
     unit_of_measurement: "%"
     name: "Rain Barrel % Full"
   - platform: adc
@@ -50,7 +50,7 @@ sensor:
       return id(capacitive_soil_moisture_sensor).state;
     filters:
       calibrate_linear:
-        - 0.65 -> 0
-        - 0.25 -> 100
+        - 0.60 -> 0
+        - 0.27 -> 100
     unit_of_measurement: "%"
     name: "Soil % Wet"
