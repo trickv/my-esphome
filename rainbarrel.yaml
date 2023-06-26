@@ -37,7 +37,7 @@ sensor:
     filters:
       calibrate_linear:
         - 0.07 -> 100
-        - 0.80 -> 0
+        - 0.685 -> 0
     unit_of_measurement: "%"
     name: "Rain Barrel % Full"
     state_class: measurement
