@@ -24,21 +24,39 @@ wifi:
 
 captive_portal:
 
+sensor:
+  - platform: uptime
+    name: Uptime
+    id: orbit_control_uptime
+
 switch:
   - platform: gpio
-    name: D1
+    name: D1 open
+    id: d1
     pin:
       number: D1
       mode: OUTPUT
       inverted: false
+    on_turn_on:
+      - switch.turn_on: d3
+      - delay: 200ms
+      - switch.turn_off: d3
+      - switch.turn_off: d1
   - platform: gpio
-    name: D2
+    name: D2 close
+    id: d2
     pin:
       number: D2
       mode: OUTPUT
       inverted: false
+    on_turn_on:
+      - switch.turn_on: d3
+      - delay: 200ms
+      - switch.turn_off: d3
+      - switch.turn_off: d2
   - platform: gpio
-    name: D3
+    name: D3 enable
+    id: d3
     pin:
       number: D3
       mode: OUTPUT
