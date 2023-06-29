@@ -33,7 +33,6 @@ sensor:
     pin: 34
     name: "Soil Moisture Sensor Voltage"
     id: capacitive_soil_moisture_sensor
-    update_interval: 1s
   - platform: template
     lambda: |-
       return id(capacitive_soil_moisture_sensor).state;
