@@ -12,8 +12,6 @@ logger:
 
 # Enable Home Assistant API
 api:
-  encryption:
-    key: "He5iKy5FqK0vCYw7+Gorlv7N9wyTpe9y8CikNOICdD8="
 
 ota:
   password: "39802df7cb2f4e092f1d29029c80f9d0"
@@ -28,4 +26,21 @@ wifi:
     password: "42zXQj5be2uN"
 
 captive_portal:
-    
+
+sensor:
+  - platform: adc
+    # Might be D34 / GPIO 34 but physically it's labelled P34
+    pin: 34
+    name: "Soil Moisture Sensor Voltage"
+    id: capacitive_soil_moisture_sensor
+    update_interval: 1s
+  - platform: template
+    lambda: |-
+      return id(capacitive_soil_moisture_sensor).state;
+    filters:
+      calibrate_linear:
+        - 0.60 -> 0
+        - 0.27 -> 100
+    unit_of_measurement: "%"
+    name: "Soil % Wet"
+    state_class: measurement
