@@ -30,3 +30,16 @@ wifi:
 captive_portal:
 
 esp32_ble_tracker:
+
+uart:
+  tx_pin: 16
+  rx_pin: 17
+  baud_rate: 9600
+
+sensor:
+  - platform: sds011
+    pm_2_5:
+      name: "Particulate Matter <2.5µm Concentration"
+    pm_10_0:
+      name: "Particulate Matter <10.0µm Concentration"
+    update_interval: 5min
