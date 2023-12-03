@@ -3,6 +3,7 @@ esphome:
 
 esp8266:
   board: d1_mini
+  restore_from_flash: true
 
 # Enable logging
 logger:
@@ -41,6 +42,8 @@ switch:
       inverted: true
 
 sensor:
+  - platform: uptime
+    name: Uptime
   - platform: dallas
     address: 0xd90000052d382e28
     name: "West encap sensor"
