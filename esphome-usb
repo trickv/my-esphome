@@ -1,1 +1,2 @@
-docker run --device=/dev/ttyUSB0 --rm --net=host -v "${PWD}":/config -it esphome/esphome:2023.11.6 $*
+docker pull esphome/esphome:stable
+docker run --device=/dev/ttyUSB0 --rm --net=host -v "${PWD}":/config -it esphome/esphome:stable $*
