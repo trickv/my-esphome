@@ -1,8 +1,8 @@
 substitutions:
-  ui_name: S31-A
+  ui_name: S31-M
 
 esphome:
-  name: s31-a
+  name: s31-m
 
 esp8266:
   board: esp01_1m
@@ -16,7 +16,7 @@ logger:
 api:
 
 ota:
-  password: "e293995bb5a0ef2b16b926c88671cebc"
+  password: !secret ota_password
 
 wifi:
   ssid: !secret wifi_ssid
@@ -25,7 +25,7 @@ wifi:
   # Enable fallback hotspot (captive portal) in case wifi connection fails
   ap:
     ssid: "${ui_name} Fallback Hotspot"
-    password: "9cRLcjwQDm9D"
+    password: !secret wifi_fallback_hotspot_password
 
 captive_portal:
 
