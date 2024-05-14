@@ -1,3 +1,5 @@
+# this esp32 was repurposed as basement-water; config left for reference
+
 esphome:
   name: esp32-soil
   friendly_name: esp32-soil

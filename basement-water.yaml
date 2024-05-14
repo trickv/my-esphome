@@ -1,0 +1,51 @@
+esphome:
+  name: basement-water
+  friendly_name: basement-water
+
+esp32:
+  board: esp32dev
+  framework:
+    type: arduino
+
+# Enable logging
+logger:
+
+# Enable Home Assistant API
+api:
+  encryption:
+    key: "DWpFDPV36vATVKqnpLpYodH1ZcxfqsZ9V8O0iqCig5Q="
+
+ota:
+  password: "5f2b54a2bed7c653ef92022cad88e4cd"
+
+wifi:
+  ssid: !secret wifi_ssid
+  password: !secret wifi_password
+
+  # Enable fallback hotspot (captive portal) in case wifi connection fails
+  ap:
+    ssid: "Basement-Water Fallback Hotspot"
+    password: "hyWph42eKTEJ"
+
+captive_portal:
+
+# Example configuration entry for finding threshold values
+esp32_touch:
+  setup_mode: False
+  id: esp32_touch_1
+
+binary_sensor:
+  - platform: esp32_touch
+    id: esp32_touch_pad
+    name: "ESP32 Touch Pad GPIO27"
+    pin: GPIO27
+    threshold: 50
+
+sensor:
+  - platform: template
+    name: "Raw touch value"
+    lambda: |-
+        return id(esp32_touch_pad).get_value();
+    update_interval: 3s
+    state_class: "measurement"
+    accuracy_decimals: 1
