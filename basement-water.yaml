@@ -16,6 +16,7 @@ api:
     key: "DWpFDPV36vATVKqnpLpYodH1ZcxfqsZ9V8O0iqCig5Q="
 
 ota:
+  platform: esphome
   password: "5f2b54a2bed7c653ef92022cad88e4cd"
 
 wifi:
@@ -39,7 +40,7 @@ binary_sensor:
     id: esp32_touch_pad
     name: "ESP32 Touch Pad GPIO27"
     pin: GPIO27
-    threshold: 50
+    threshold: 10
 
 sensor:
   - platform: template
