@@ -1,0 +1,55 @@
+substitutions:
+  name: esphome-web-005a15
+  friendly_name: radiator-control-1
+
+esphome:
+  name: ${name}
+  friendly_name: ${friendly_name}
+  min_version: 2024.6.0
+  name_add_mac_suffix: false
+  project:
+    name: esphome.web
+    version: dev
+
+esp8266:
+  board: d1_mini
+
+# Enable logging
+logger:
+
+# Enable Home Assistant API
+api:
+
+# Allow Over-The-Air updates
+ota:
+- platform: esphome
+
+# Allow provisioning Wi-Fi via serial
+improv_serial:
+
+wifi:
+  # Set up a wifi access point
+  ap: {}
+
+# In combination with the `ap` this allows the user
+# to provision wifi credentials to the device via WiFi AP.
+captive_portal:
+
+dashboard_import:
+  package_import_url: github://esphome/example-configs/esphome-web/esp8266.yaml@main
+  import_full_config: true
+
+# To have a "next url" for improv serial
+web_server:
+
+stepper:
+  - platform: a4988
+    id: my_stepper
+    step_pin: D5
+    dir_pin: D6
+    max_speed: 250 steps/s
+
+    # Optional:
+    sleep_pin: D0
+    #acceleration: inf
+    #deceleration: inf
