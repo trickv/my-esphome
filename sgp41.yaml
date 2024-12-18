@@ -1,0 +1,44 @@
+esphome:
+  name: sgp41
+  friendly_name: sgp41
+
+esp8266:
+  board: d1_mini
+
+# Enable logging
+logger:
+
+# Enable Home Assistant API
+api:
+  encryption:
+    key: "Vp88YEh/KuEVKbwmcSv5pWlwpIYqFuE7y/7jn9Wtdqw="
+
+ota:
+  - platform: esphome
+    password: "f3639d3ec9ef2b1bfec04d481bd96acc"
+
+wifi:
+  ssid: !secret wifi_ssid
+  password: !secret wifi_password
+
+  # Enable fallback hotspot (captive portal) in case wifi connection fails
+  ap:
+    ssid: "Sgp41 Fallback Hotspot"
+    password: "uHAzHlQRSSSp"
+
+captive_portal:
+
+i2c:
+  sda: D4
+  scl: D5
+  scan: true
+  id: bus_a
+
+sensor:
+  - platform: sgp4x
+    voc:
+      name: "VOC Index"
+      state_class: "measurement"
+    nox:
+      name: "NOx Index"
+      state_class: "measurement"
