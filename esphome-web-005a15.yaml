@@ -57,46 +57,24 @@ stepper:
     #acceleration: inf
     #deceleration: inf
 
-number:
-  - platform: template
-    id: stepper_1_number
-    name: Stepper Control 1
-    min_value: -100
-    max_value: 100
-    step: 1
-    restore_value: True
-    initial_value: 0
-    set_action:
-      then:
-        - stepper.set_target:
-            id: my_stepper_1
-            target: !lambda 'return x;'
 button:
   - platform: template
-    name: "Increment Number S1 by 5"
-    id: increment_button
-    on_press:
-      - number.set:
-          id: stepper_1_number
-          value: !lambda |-
-            return id(stepper_1_number).state + 5;
-
-  - platform: template
-    name: "Increment Number S1 Action"
-    id: increment_button_action
-    on_press:
-      - number.increment:
-          id: stepper_1_number
-          cycle: false
-
-  - platform: template
-    name: "Decrement Number S1 by 5"
+    name: "Decrement Stepper by 1"
     id: decrement_button
     on_press:
-      - number.set:
-          id: stepper_1_number
-          value: !lambda |-
-            return id(stepper_1_number).state - 5;
+      - stepper.set_target:
+          id: my_stepper_1
+          target: !lambda |-
+            return id(my_stepper_1).target_position - 1;
+
+  - platform: template
+    name: "Increment Stepper by 1"
+    id: increment_button
+    on_press:
+      - stepper.set_target:
+          id: my_stepper_1
+          target: !lambda |-
+            return id(my_stepper_1).target_position + 1;
 
 sensor:
   - platform: template

@@ -1,5 +1,6 @@
 substitutions:
   ui_name: S31-H
+  update_interval: 10s
 
 esphome:
   name: s31-h
@@ -16,6 +17,7 @@ logger:
 api:
 
 ota:
+  platform: esphome
   password: !secret ota_password
 
 wifi:
@@ -50,19 +52,27 @@ sensor:
     name: "${ui_name} WiFi Signal"
     update_interval: 60s
   - platform: cse7766
-    update_interval: 10s
     current:
       name: "${ui_name} Current"
       accuracy_decimals: 3
+      filters:
+        - throttle_average: ${update_interval}
     voltage:
       name: "${ui_name} Voltage"
       accuracy_decimals: 1
+      filters:
+        - throttle_average: ${update_interval}
     power:
       name: "${ui_name} Power"
       accuracy_decimals: 1
       id: power
+      state_class: "measurement"
+      filters:
+        - throttle_average: ${update_interval}
     energy:
       name: "${ui_name} Energy"
+      filters:
+        - throttle: ${update_interval}
   - platform: total_daily_energy
     name: "${ui_name} Total Daily Energy"
     power_id: power

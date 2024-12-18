@@ -15,6 +15,7 @@ logger:
 api:
 
 ota:
+  platform: esphome
   password: "0d2c35f4835245c3ebe26a4edb7c486b"
 
 sensor:

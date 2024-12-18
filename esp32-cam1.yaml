@@ -37,11 +37,12 @@ api:
           }
 
 ota:
+  platform: esphome
   password: "81539c7553bf82d0a89cd88b62924ce6"
 
 wifi:
-  ssid: !secret wifi_ssid
-  password: !secret wifi_password
+  ssid: !secret wifi_xkcd350_ssid
+  password: !secret wifi_xkcd350_password
 
   # Enable fallback hotspot (captive portal) in case wifi connection fails
   ap:
@@ -60,6 +61,31 @@ sensor:
     update_interval: 60s
   - platform: uptime
     name: Uptime Sensor
+
+text_sensor:
+  - platform: wifi_info
+    ip_address:
+      name: ESP IP Address
+      address_0:
+        name: ESP IP Address 0
+      address_1:
+        name: ESP IP Address 1
+      address_2:
+        name: ESP IP Address 2
+      address_3:
+        name: ESP IP Address 3
+      address_4:
+        name: ESP IP Address 4
+    ssid:
+      name: ESP Connected SSID
+    bssid:
+      name: ESP Connected BSSID
+    mac_address:
+      name: ESP Mac Wifi Address
+    scan_results:
+      name: ESP Latest Scan Results
+    dns_address:
+      name: ESP DNS Address
 
 esp32_camera:
   # modified with bits from https://jamesachambers.com/cheap-esp32-cam-home-assistant-esphome-camera-guide/ in April 2023 and working much better
@@ -80,7 +106,7 @@ esp32_camera:
   jpeg_quality: 10  # max. 63
   max_framerate: 1.0fps
   idle_framerate: 0.2fps
-  vertical_flip: true
+  vertical_flip: false
   horizontal_mirror: false
   brightness: 2 # -2 to 2
   contrast: 1 # -2 to 2

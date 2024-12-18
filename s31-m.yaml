@@ -1,5 +1,6 @@
 substitutions:
   ui_name: S31-M
+  update_interval: 10s
 
 esphome:
   name: s31-m
@@ -16,6 +17,7 @@ logger:
 api:
 
 ota:
+  platform: esphome
   password: !secret ota_password
 
 wifi:
@@ -32,6 +34,7 @@ captive_portal:
 uart:
   rx_pin: RX
   baud_rate: 4800
+  parity: EVEN
 
 binary_sensor:
   - platform: gpio
@@ -54,22 +57,23 @@ sensor:
       name: "${ui_name} Current"
       accuracy_decimals: 3
       filters:
-        - throttle_average: 10s
+        - throttle_average: ${update_interval}
     voltage:
       name: "${ui_name} Voltage"
       accuracy_decimals: 1
       filters:
-        - throttle_average: 10s
+        - throttle_average: ${update_interval}
     power:
       name: "${ui_name} Power"
       accuracy_decimals: 1
-      filters:
-        - throttle_average: 10s
       id: power
+      state_class: "measurement"
+      filters:
+        - throttle_average: ${update_interval}
     energy:
       name: "${ui_name} Energy"
       filters:
-        - throttle_average: 10s
+        - throttle: ${update_interval}
   - platform: total_daily_energy
     name: "${ui_name} Total Daily Energy"
     power_id: power

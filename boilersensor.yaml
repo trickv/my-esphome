@@ -12,6 +12,7 @@ logger:
 api:
 
 ota:
+  platform: esphome
   password: !secret ota_password_old_arduinoota
 
 wifi:
