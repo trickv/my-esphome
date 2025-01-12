@@ -53,13 +53,23 @@ stepper:
     max_speed: 250 steps/s
 
     # Optional:
-    sleep_pin: D2
+    #sleep_pin: D2
+    #acceleration: inf
+    #deceleration: inf
+  - platform: a4988
+    id: stepper_south
+    step_pin: D1
+    dir_pin: D2
+    max_speed: 250 steps/s
+
+    # Optional:
+    #sleep_pin: D0
     #acceleration: inf
     #deceleration: inf
 
 button:
   - platform: template
-    name: "Decrement Stepper by 1"
+    name: "West rad: Decrement Stepper by 1"
     id: decrement_button
     on_press:
       - stepper.set_target:
@@ -68,22 +78,49 @@ button:
             return id(my_stepper_1).target_position - 1;
 
   - platform: template
-    name: "Increment Stepper by 1"
+    name: "West rad: Increment Stepper by 1"
     id: increment_button
     on_press:
       - stepper.set_target:
           id: my_stepper_1
           target: !lambda |-
             return id(my_stepper_1).target_position + 1;
+  - platform: template
+    name: "South rad: Decrement Stepper by 1"
+    id: decrement_button_south
+    on_press:
+      - stepper.set_target:
+          id: stepper_south
+          target: !lambda |-
+            return id(stepper_south).target_position - 1;
+
+  - platform: template
+    name: "South rad: Increment Stepper by 1"
+    id: increment_button_south
+    on_press:
+      - stepper.set_target:
+          id: stepper_south
+          target: !lambda |-
+            return id(stepper_south).target_position + 1;
 
 sensor:
   - platform: template
-    name: "Stepper: current_position"
+    name: "West rad: Stepper: current_position"
     lambda: |-
         return id(my_stepper_1).current_position;
     update_interval: 1s
   - platform: template
-    name: "Stepper: target_position"
+    name: "West rad: Stepper: target_position"
     lambda: |-
         return id(my_stepper_1).target_position;
+    update_interval: 1s
+  - platform: template
+    name: "South rad: Stepper: current_position"
+    lambda: |-
+        return id(stepper_south).current_position;
+    update_interval: 1s
+  - platform: template
+    name: "South rad: Stepper: target_position"
+    lambda: |-
+        return id(stepper_south).target_position;
     update_interval: 1s
