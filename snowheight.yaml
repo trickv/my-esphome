@@ -47,6 +47,8 @@ sensor:
     name: "Ultrasonic distance"
     id: ultrasonic_sensor
     accuracy_decimals: 3
+    filters:
+      - max
   - platform: template
     name: "Snow height (in)"
     lambda: !lambda |-
