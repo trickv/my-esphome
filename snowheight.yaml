@@ -52,7 +52,7 @@ sensor:
   - platform: template
     name: "Snow height (in)"
     lambda: !lambda |-
-      return( (0.87791 - id(ultrasonic_sensor).state) * 39.3701 );
+      return( (0.89730 - id(ultrasonic_sensor).state) * 39.3701 );
     state_class: "measurement"
     device_class: "distance"
     unit_of_measurement: "in"
@@ -60,7 +60,7 @@ sensor:
   - platform: template
     name: "Snow height (m)"
     lambda: !lambda |-
-      return( (0.87791 - id(ultrasonic_sensor).state) );
+      return( (0.89730 - id(ultrasonic_sensor).state) );
     state_class: "measurement"
     device_class: "distance"
     unit_of_measurement: "m"
