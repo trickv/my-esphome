@@ -1,0 +1,15 @@
+#!/usr/bin/env bash
+
+for a in *yaml; do
+    echo -n "$a: "
+    start_time=$(date +%s)
+    ./esphome compile $a > /dev/null
+    if [ $? -eq 0 ]; then
+        echo -n "OK"
+    else
+        echo -n "FAIL"
+    fi
+    end_time=$(date +%s)
+    duration=$((end_time - start_time))
+    echo " ($duration seconds)"
+done
