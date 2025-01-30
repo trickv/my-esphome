@@ -26,14 +26,19 @@ wifi:
 captive_portal:
 
 sensor:
-  - platform: dallas
+  - platform: dallas_temp
     address: 0xe4000004bbd15428
     name: "supply"
     id: hvac_sensor_supply
-  - platform: dallas
+  - platform: dallas_temp
     address: 0x5d0301a279fb3428
     name: "return"
     id: hvac_sensor_return
+  - platform: dallas_temp
+    address: 0x9200000069dc4728
+    name: "condensate trap"
+    id: hvac_sensor_condensate_trap
+    resolution: 12
   - platform: template
     name: delta_t
     lambda: |-
@@ -47,5 +52,6 @@ sensor:
     id: hvac_sensor_delta_t_f
     unit_of_measurement: "°F"
 
-dallas:
-  - pin: D5
+one_wire:
+  - platform: gpio
+    pin: D5
