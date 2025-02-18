@@ -35,21 +35,21 @@ sensor:
   - platform: wifi_signal
     name: "WiFi Signal Sensor"
     update_interval: 60s
-#  - platform: dallas
-#    address: 0x5D0301A279FB3428
-#    name: "Boiler Hot Supply"
-  - platform: dallas
+  - platform: dallas_temp
     address: 0x1B000004BAAC9628
     name: "Boiler Cool Return West"
-  - platform: dallas
+  - platform: dallas_temp
     address: 0x060300A27927EB28
     name: "Boiler Cool Return East"
-  - platform: dallas
+  - platform: dallas_temp
     address: 0x5a0121142bddd328
     name: "Boiler Hot Supply"
-  - platform: dallas
+  - platform: dallas_temp
     address: 0x630121144ed00328
     name: "Boiler Hot Exit"
+  - platform: dallas_temp
+    address: 0x7500000086bb8228
+    name: "Shower Hot"
 
 text_sensor:
   - platform: wifi_info
@@ -58,8 +58,9 @@ text_sensor:
     mac_address:
       name: ESP Mac Wifi Address
 
-dallas:
-  - pin: GPIO2
+one_wire:
+  - platform: gpio
+    pin: GPIO2
   
 #[03:07:57][D][dallas.sensor:081]:     0x5D0301A279FB3428 # hot supply # id=\"2834fb79a201035d\
 #[03:07:57][D][dallas.sensor:081]:     0x1B000004BAAC9628 # east # id=\"28eb2779a2000306\"
