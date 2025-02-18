@@ -32,3 +32,7 @@ captive_portal:
 sensor:
   - platform: uptime
     name: Uptime
+  
+binary_sensor:
+  - platform: status
+    name: Status
