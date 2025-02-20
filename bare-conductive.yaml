@@ -28,3 +28,23 @@ captive_portal:
 sensor:
   - platform: uptime
     name: Uptime
+
+text_sensor:
+  - platform: template
+    name: "UART Received Data"
+    id: uart_received_data
+
+uart:
+    baud_rate: 115200
+    tx_pin: GPIO1
+    rx_pin: GPIO3
+    debug:
+      direction: RX
+      dummy_receiver: true
+      after:
+        delimiter: "\r\n"
+      sequence:
+        - lambda: |-
+            UARTDebug::log_string(direction, bytes);
+            std::string str(bytes.begin(), bytes.end());
+            id(uart_received_data).publish_state(str.c_str());
