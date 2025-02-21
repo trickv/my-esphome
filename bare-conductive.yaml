@@ -28,6 +28,10 @@ captive_portal:
 sensor:
   - platform: uptime
     name: Uptime
+  - platform: template
+    id: bare_conductive_active_pin
+    name: "Active Bare Conductive Pin"
+    accuracy_decimals: 0
 
 text_sensor:
   - platform: template
@@ -35,6 +39,10 @@ text_sensor:
     id: uart_received_data
 
 binary_sensor:
+      # Binary sensor that turns on if any pin is touched
+    - platform: template
+      id: bare_conductive_any_touch
+      name: "Any Bare Conductive Touch"
     - platform: template
       name: E0 Touch
       publish_initial_state: true
@@ -119,7 +127,7 @@ uart:
             size_t num_start = pin_pos + 4;
             size_t num_end = str.find(" ", num_start);
             if (num_end == std::string::npos) return;
-
+            
             int pin = atoi(str.substr(num_start, num_end - num_start).c_str());
 
             // Determine if it's a touch or release event
@@ -140,3 +148,24 @@ uart:
                 case 10: id(bare_conductive_e10).publish_state(state); break;
                 case 11: id(bare_conductive_e11).publish_state(state); break;
             }
+
+            // If a pin is being touched, update the active pin sensor
+            if (state) {
+                id(bare_conductive_active_pin).publish_state(pin);
+            }
+
+            // Check if any pin is still active
+            bool any_active = id(bare_conductive_e0).state ||
+                             id(bare_conductive_e1).state ||
+                             id(bare_conductive_e2).state ||
+                             id(bare_conductive_e3).state ||
+                             id(bare_conductive_e4).state ||
+                             id(bare_conductive_e5).state ||
+                             id(bare_conductive_e6).state ||
+                             id(bare_conductive_e7).state ||
+                             id(bare_conductive_e8).state ||
+                             id(bare_conductive_e9).state ||
+                             id(bare_conductive_e10).state ||
+                             id(bare_conductive_e11).state;
+
+            id(bare_conductive_any_touch).publish_state(any_active);
