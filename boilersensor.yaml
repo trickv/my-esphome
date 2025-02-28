@@ -38,18 +38,23 @@ sensor:
   - platform: dallas_temp
     address: 0x1B000004BAAC9628
     name: "Boiler Cool Return West"
+    update_interval: 10s
   - platform: dallas_temp
     address: 0x060300A27927EB28
     name: "Boiler Cool Return East"
+    update_interval: 10s
   - platform: dallas_temp
     address: 0x5a0121142bddd328
     name: "Boiler Hot Supply"
+    update_interval: 10s
   - platform: dallas_temp
     address: 0x630121144ed00328
     name: "Boiler Hot Exit"
+    update_interval: 10s
   - platform: dallas_temp
     address: 0x7500000086bb8228
     name: "Shower Hot"
+    update_interval: 10s
 
 text_sensor:
   - platform: wifi_info
