@@ -124,3 +124,14 @@ sensor:
     lambda: |-
         return id(stepper_south).target_position;
     update_interval: 1s
+  - platform: dallas_temp
+    address: 0x1600000086d5ec28
+    name: "Far"
+  - platform: dallas_temp
+    address: 0x7e000000871f4328
+    name: "Mid"
+
+
+one_wire:
+  - platform: gpio
+    pin: D3
