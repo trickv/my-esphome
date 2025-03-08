@@ -1,5 +1,5 @@
 substitutions:
-  name: den-radiator
+  name: bedroom-radiator
 
 esphome:
   name: ${name}
