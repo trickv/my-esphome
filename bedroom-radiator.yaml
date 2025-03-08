@@ -43,15 +43,15 @@ dashboard_import:
 # To have a "next url" for improv serial
 web_server:
 
-#sensor:
-#  - platform: dallas_temp
-#    address: 0x1600000086d5ec28
-#    name: "Far"
-#    update_interval: 10s
-#  - platform: dallas_temp
-#    address: 0x7e000000871f4328
-#    name: "Mid"
-#    update_interval: 10s
+sensor:
+  - platform: dallas_temp
+    address: 0x5d00000056c75a28
+    id: Ox5d00000056c75a28
+    update_interval: 10s
+  - platform: dallas_temp
+    address: 0x99000000371bf128
+    id: Ox99000000371bf128
+    update_interval: 10s
 
 
 one_wire:
