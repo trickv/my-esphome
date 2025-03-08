@@ -127,9 +127,15 @@ sensor:
   - platform: dallas_temp
     address: 0x1600000086d5ec28
     name: "Far"
+    update_interval: 10s
   - platform: dallas_temp
     address: 0x7e000000871f4328
     name: "Mid"
+    update_interval: 10s
+  - platform: dallas_temp
+    address: 0xa700000037c63f28
+    name: "Near"
+    update_interval: 10s
 
 
 one_wire:
