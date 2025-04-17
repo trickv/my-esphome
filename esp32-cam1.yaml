@@ -1,7 +1,10 @@
 esphome:
   name: esp32-cam1
-  platform: ESP32
+
+esp32:
   board: esp32dev
+  framework:
+    type: arduino
 
 # Enable logging
 logger:
