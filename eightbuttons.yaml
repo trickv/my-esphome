@@ -94,6 +94,6 @@ binary_sensor:
     pin:
       number: D8  # GPIO15 (must be LOW at boot)
       mode: INPUT
-      inverted: true  # Button pulls HIGH when pressed
-    name: "Button 8 red-left (huaile)"
+      inverted: false  # Button pulls HIGH when pressed
+    name: "Button 8 red-left"
 
