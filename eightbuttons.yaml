@@ -47,6 +47,9 @@ binary_sensor:
       mode: INPUT_PULLUP
       inverted: true
     name: "Button 1 green-right"
+    filters:
+      - delayed_on: 10ms
+      - delayed_off: 10ms
 
   - platform: gpio
     pin:
@@ -54,6 +57,9 @@ binary_sensor:
       mode: INPUT_PULLUP
       inverted: true
     name: "Button 2 green-left"
+    filters:
+      - delayed_on: 10ms
+      - delayed_off: 10ms
 
   - platform: gpio
     pin:
@@ -61,6 +67,9 @@ binary_sensor:
       mode: INPUT_PULLUP
       inverted: true
     name: "Button 3 blue-right"
+    filters:
+      - delayed_on: 10ms
+      - delayed_off: 10ms
 
   - platform: gpio
     pin:
@@ -68,6 +77,9 @@ binary_sensor:
       mode: INPUT_PULLUP
       inverted: true
     name: "Button 4 blue-left"
+    filters:
+      - delayed_on: 10ms
+      - delayed_off: 10ms
 
   - platform: gpio
     pin:
@@ -75,6 +87,9 @@ binary_sensor:
       mode: INPUT_PULLUP
       inverted: true
     name: "Button 5 yellow-right"
+    filters:
+      - delayed_on: 10ms
+      - delayed_off: 10ms
 
   - platform: gpio
     pin:
@@ -82,6 +97,9 @@ binary_sensor:
       mode: INPUT_PULLUP
       inverted: true
     name: "Button 6 yellow-left"
+    filters:
+      - delayed_on: 10ms
+      - delayed_off: 10ms
 
   - platform: gpio
     pin:
@@ -89,6 +107,9 @@ binary_sensor:
       mode: INPUT_PULLUP
       inverted: true
     name: "Button 7 red-right"
+    filters:
+      - delayed_on: 10ms
+      - delayed_off: 10ms
 
   - platform: gpio
     pin:
@@ -96,4 +117,6 @@ binary_sensor:
       mode: INPUT
       inverted: false  # Button pulls HIGH when pressed
     name: "Button 8 red-left"
-
+    filters:
+      - delayed_on: 10ms
+      - delayed_off: 10ms
