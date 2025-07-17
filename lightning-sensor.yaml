@@ -41,12 +41,13 @@ dashboard_import:
 # To have a "next url" for improv serial
 web_server:
 
-i2c:
-  sda: D2
-  scl: D1
-  scan: true
+spi:
+  clk_pin: D7
+  mosi_pin: D1
+  miso_pin: D2
 
-as3935_i2c:
+as3935_spi:
+  cs_pin: D5
   irq_pin: D6
 
 sensor:
