@@ -46,11 +46,11 @@ web_server:
 sensor:
   - platform: dallas_temp
     address: 0x5d00000056c75a28
-    id: Ox5d00000056c75a28
+    name: 0x5d00000056c75a28
     update_interval: 10s
   - platform: dallas_temp
     address: 0x99000000371bf128
-    id: Ox99000000371bf128
+    name: 0x99000000371bf128
     update_interval: 10s
 
 
