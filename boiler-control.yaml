@@ -27,6 +27,8 @@ wifi:
 captive_portal:
 
 switch:
+  - platform: restart
+    name: Restart
   - platform: gpio
     name: East
     id: boiler_control_east
