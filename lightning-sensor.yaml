@@ -50,6 +50,10 @@ as3935_spi:
   cs_pin: D5
   irq_pin: D6
 
+switch:
+  - platform: restart
+    name: Restart
+
 sensor:
   - platform: as3935
     lightning_energy:
