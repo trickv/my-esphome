@@ -43,8 +43,8 @@ web_server:
 
 spi:
   clk_pin: D7
-  mosi_pin: D1
-  miso_pin: D2
+  mosi_pin: D2
+  miso_pin: D1
 
 as3935_spi:
   cs_pin: D5
