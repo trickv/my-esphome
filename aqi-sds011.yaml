@@ -50,7 +50,77 @@ sensor:
   - platform: sds011
     pm_2_5:
       name: "Particulate Matter <2.5µm Concentration"
+      id: pm25_sensor
     pm_10_0:
       name: "Particulate Matter <10.0µm Concentration"
-    update_interval: 5min
+      id: pm10_sensor
+    update_interval: 0min
 
+  - platform: template
+    name: "PM2.5 AQI"
+    id: pm25_aqi_sensor
+    lambda: |-
+      float pm25 = id(pm25_sensor).state;
+      if (pm25 < 0) return 0;
+
+      const float breakpoints[][3] = {
+        {0.0, 12.0, 50},
+        {12.1, 35.4, 100},
+        {35.5, 55.4, 150},
+        {55.5, 150.4, 200},
+        {150.5, 250.4, 300},
+        {250.5, 350.4, 400},
+        {350.5, 500.4, 500}
+      };
+ 
+      for (int i = 0; i < 7; i++) {
+        float Clow = breakpoints[i][0];
+        float Chigh = breakpoints[i][1];
+        float AQIhigh = breakpoints[i][2];
+        float AQIlow = (i == 0) ? 0 : breakpoints[i - 1][2];
+
+        if (pm25 >= Clow && pm25 <= Chigh) {
+          return ((AQIhigh - AQIlow) / (Chigh - Clow)) * (pm25 - Clow) + AQIlow;
+        }
+      }
+
+      return 500;
+
+  - platform: template
+    name: "PM10 AQI"
+    id: pm10_aqi_sensor
+    lambda: |-
+        float pm10 = id(pm10_sensor).state;
+        if (pm10 < 0) return 0;
+
+        const float breakpoints[][3] = {
+          {0.0, 54.0, 50},
+          {55.0, 154.0, 100},
+          {155.0, 254.0, 150},
+          {255.0, 354.0, 200},
+          {355.0, 424.0, 300},
+          {425.0, 504.0, 400},
+          {505.0, 604.0, 500}
+        };
+
+        for (int i = 0; i < 7; i++) {
+          float Clow = breakpoints[i][0];
+          float Chigh = breakpoints[i][1];
+          float AQIhigh = breakpoints[i][2];
+          float AQIlow = (i == 0) ? 0 : breakpoints[i - 1][2];
+
+          if (pm10 >= Clow && pm10 <= Chigh) {
+            return ((AQIhigh - AQIlow) / (Chigh - Clow)) * (pm10 - Clow) + AQIlow;
+          }
+        }
+
+        return 500;
+
+  - platform: template
+    name: "Overall AQI"
+    id: overall_aqi
+    lambda: |-
+        float aqi25 = id(pm25_aqi_sensor).state;
+        float aqi10 = id(pm10_aqi_sensor).state;
+        if (aqi25 < 0 && aqi10 < 0) return 0;
+        return (aqi25 > aqi10) ? aqi25 : aqi10;
