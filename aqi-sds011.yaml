@@ -54,11 +54,13 @@ sensor:
     pm_10_0:
       name: "Particulate Matter <10.0µm Concentration"
       id: pm10_sensor
-    update_interval: 0min
+    update_interval: 5min
 
   - platform: template
     name: "PM2.5 AQI"
-    id: pm25_aqi_sensor
+    icon: mdi:air-filter
+    id: calculated_pm25_aqi_sensor
+    accuracy_decimals: 1
     lambda: |-
       float pm25 = id(pm25_sensor).state;
       if (pm25 < 0) return 0;
@@ -80,7 +82,7 @@ sensor:
         float AQIlow = (i == 0) ? 0 : breakpoints[i - 1][2];
 
         if (pm25 >= Clow && pm25 <= Chigh) {
-          return ((AQIhigh - AQIlow) / (Chigh - Clow)) * (pm25 - Clow) + AQIlow;
+          return float(round(((AQIhigh - AQIlow) / (Chigh - Clow)) * (pm25 - Clow) + AQIlow));
         }
       }
 
@@ -88,7 +90,9 @@ sensor:
 
   - platform: template
     name: "PM10 AQI"
-    id: pm10_aqi_sensor
+    icon: mdi:air-filter
+    id: calculated_pm10_aqi_sensor
+    accuracy_decimals: 1
     lambda: |-
         float pm10 = id(pm10_sensor).state;
         if (pm10 < 0) return 0;
@@ -118,9 +122,11 @@ sensor:
 
   - platform: template
     name: "Overall AQI"
-    id: overall_aqi
+    icon: mdi:air-filter
+    id: max_overall_aqi
+    accuracy_decimals: 1
     lambda: |-
-        float aqi25 = id(pm25_aqi_sensor).state;
-        float aqi10 = id(pm10_aqi_sensor).state;
+        float aqi25 = id(calculated_pm25_aqi_sensor).state;
+        float aqi10 = id(calculated_pm10_aqi_sensor).state;
         if (aqi25 < 0 && aqi10 < 0) return 0;
         return (aqi25 > aqi10) ? aqi25 : aqi10;
