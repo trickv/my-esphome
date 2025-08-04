@@ -61,6 +61,7 @@ sensor:
     icon: mdi:air-filter
     id: calculated_pm25_aqi_sensor
     accuracy_decimals: 1
+    state_class: measurement
     lambda: |-
       float pm25 = id(pm25_sensor).state;
       if (pm25 < 0) return 0;
@@ -86,13 +87,14 @@ sensor:
         }
       }
 
-      return 500;
+      return -1;
 
   - platform: template
     name: "PM10 AQI"
     icon: mdi:air-filter
     id: calculated_pm10_aqi_sensor
     accuracy_decimals: 1
+    state_class: measurement
     lambda: |-
         float pm10 = id(pm10_sensor).state;
         if (pm10 < 0) return 0;
@@ -118,15 +120,16 @@ sensor:
           }
         }
 
-        return 500;
+        return -1;
 
   - platform: template
     name: "Overall AQI"
     icon: mdi:air-filter
     id: max_overall_aqi
     accuracy_decimals: 1
+    state_class: measurement
     lambda: |-
         float aqi25 = id(calculated_pm25_aqi_sensor).state;
         float aqi10 = id(calculated_pm10_aqi_sensor).state;
-        if (aqi25 < 0 && aqi10 < 0) return 0;
+        if (aqi25 < 0 && aqi10 < 0) return -1;
         return (aqi25 > aqi10) ? aqi25 : aqi10;
