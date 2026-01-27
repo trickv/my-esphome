@@ -55,34 +55,6 @@ sensor:
     address: 0xd20000052d567728
     name: "East encap sensor"
     id: boiler_control_east_sensor
-  - platform: dallas_temp
-    address: 0x4e00000084afb428
-    name: "East kids BR"
-    id: boiler_control_east_kids_br_sensor
-  - platform: template
-    name: "East virtual sensor"
-    id: east_virtual_sensor
-    unit_of_measurement: "°C"
-    lambda: |-
-      if (strcmp(id(east_selected_sensor).state.c_str(), "Dining Room Sensor") == 0) {
-        return id(boiler_control_east_sensor).state;
-      } else {
-        return id(boiler_control_east_kids_br_sensor).state;
-      }
-    update_interval: 5s
-    device_class: temperature
-    state_class: measurement
-
-select:
-  - platform: template
-    name: "East zone selected sensor"
-    id: east_selected_sensor
-    options:
-      - "Dining Room Sensor"
-      - "Kids BR Sensor"
-    initial_option: "Dining Room Sensor"
-    optimistic: true
-    restore_value: true
 
 one_wire:
   - platform: gpio
@@ -91,7 +63,7 @@ one_wire:
 climate:
   - platform: thermostat
     name: "East (esp)"
-    sensor: east_virtual_sensor
+    sensor: boiler_control_east_sensor
     default_preset: Home
     preset:
       - name: Home
