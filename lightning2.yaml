@@ -53,10 +53,10 @@ spi:
 as3935_spi:
   cs_pin: GPIO16
   irq_pin: GPIO5
-  indoor: true
-  noise_level: 3
-  watchdog_threshold: 3
-  spike_rejection: 5
+  indoor: false
+  noise_level: 2
+  watchdog_threshold: 2
+  spike_rejection: 2
 
 sensor:
   - platform: as3935
