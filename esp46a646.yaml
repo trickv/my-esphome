@@ -1,6 +1,7 @@
 esphome:
   name: esp46a646
-  platform: ESP8266
+
+esp8266:
   board: d1_mini
 
 wifi:
@@ -32,5 +33,10 @@ switch:
  - platform: gpio
    pin:
      number: D2
-   name: "relay"
+   name: "relay D2"
+   inverted: true
+ - platform: gpio
+   pin:
+     number: D3
+   name: "relay D3"
    inverted: true
