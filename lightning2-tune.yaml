@@ -1,0 +1,60 @@
+esphome:
+  name: lightning2
+  min_version: 2024.6.0
+  name_add_mac_suffix: false
+  project:
+    name: esphome.web
+    version: dev
+
+esp8266:
+  board: d1_mini
+
+logger:
+  level: DEBUG
+
+api:
+
+ota:
+- platform: esphome
+
+improv_serial:
+
+wifi:
+  ssid: !secret wifi_ssid
+  password: !secret wifi_password
+  ap: {}
+
+captive_portal:
+
+web_server:
+
+switch:
+  - platform: restart
+    name: Restart
+
+spi:
+  clk_pin: GPIO14
+  mosi_pin: GPIO13
+  miso_pin: GPIO12
+
+# AS3935 in tune_antenna mode: outputs LCO frequency on IRQ pin (GPIO5).
+# We point the component's irq_pin at an unused pin (GPIO4) so pulse_counter
+# can take GPIO5 and measure the actual frequency.
+as3935_spi:
+  cs_pin: GPIO16
+  irq_pin: GPIO4
+  tune_antenna: true
+  capacitance: 8
+
+sensor:
+  - platform: pulse_counter
+    pin:
+      number: GPIO5
+      mode: INPUT
+    name: "LCO Pulse Count"
+    id: lco_pulses
+    update_interval: 2s
+    unit_of_measurement: "Hz"
+    filters:
+      # pulse_counter reports pulses/minute by default; divide by 60 to get Hz
+      - multiply: 0.01666667

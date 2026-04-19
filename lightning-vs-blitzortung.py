@@ -65,6 +65,31 @@ def haversine(lat1, lon1, lat2, lon2):
          * math.sin(dlon / 2) ** 2)
     return R * 2 * math.atan2(math.sqrt(a), math.sqrt(1 - a))
 
+
+def decode_blitzortung(b):
+    """Decode Blitzortung's LZW-style compressed WebSocket payload."""
+    e = {}
+    d = list(b)
+    c = d[0]
+    f = c
+    g = [c]
+    l = 256
+    h = l
+    for a in range(1, len(d)):
+        k = ord(d[a])
+        if h > k:
+            k = d[a]
+        elif k in e:
+            k = e[k]
+        else:
+            k = f + c
+        g.append(k)
+        c = k[0]
+        e[l] = f + c
+        l += 1
+        f = k
+    return ''.join(g)
+
 # ---------------------------------------------------------------------------
 # Database
 # ---------------------------------------------------------------------------
@@ -144,11 +169,16 @@ async def tail_log(log_path, db, stop_event):
     path = Path(log_path)
 
     # Wait for the file to exist
+    warned = False
     while not path.exists():
         if stop_event.is_set():
             return
-        print(f"Waiting for log file: {log_path}")
+        if not warned:
+            print(f"Waiting for log file: {log_path}")
+            warned = True
         await asyncio.sleep(2)
+    if warned:
+        print(f"Log file appeared: {log_path}")
 
     last_distance = None
     last_energy = None
@@ -196,20 +226,37 @@ async def tail_log(log_path, db, stop_event):
 # ---------------------------------------------------------------------------
 
 async def stream_blitzortung(db, stop_event):
-    """Connect to Blitzortung WebSocket and record nearby strikes."""
-    box = bounding_box(LAT, LON, RADIUS_KM)
-    print(f"Blitzortung: subscribing to bounding box {box}")
+    """Connect to Blitzortung WebSocket and record nearby strikes.
 
+    Uses subscription {"a": 111} for global strikes, filters client-side by
+    bounding box + haversine. Payloads are LZW-encoded and must be decoded.
+    """
+    print(f"Blitzortung: subscribed globally, filtering to {RADIUS_KM}km radius")
+
+    connect_count = 0
+    total_msgs = 0
     while not stop_event.is_set():
         try:
             async with websockets.connect(BLITZORTUNG_WS) as ws:
-                await ws.send(json.dumps(box))
-                print("Blitzortung: connected, waiting for strikes...")
+                await ws.send(json.dumps({"a": 111}))
+                connect_count += 1
+                if connect_count == 1:
+                    print("Blitzortung: connected, waiting for strikes...")
+                elif connect_count % 50 == 0:
+                    print(f"Blitzortung: reconnected ({connect_count} times, {total_msgs} messages received)")
+
+                if connect_count == 5 and total_msgs == 0:
+                    print("WARNING: Blitzortung connected 5x but delivered no messages.")
 
                 async for message in ws:
                     if stop_event.is_set():
                         return
-                    strike = json.loads(message)
+                    total_msgs += 1
+                    try:
+                        decoded = decode_blitzortung(message)
+                        strike = json.loads(decoded)
+                    except (ValueError, json.JSONDecodeError):
+                        continue
                     if "lat" not in strike:
                         continue
 
@@ -221,7 +268,8 @@ async def stream_blitzortung(db, stop_event):
                         strike["time"] / 1e9, tz=timezone.utc
                     )
                     ts_str = ts.strftime("%Y-%m-%dT%H:%M:%S.%fZ")
-                    stations = strike.get("sig")
+                    sig = strike.get("sig", [])
+                    stations = len(sig) if isinstance(sig, list) else sig
 
                     db.execute(
                         "INSERT INTO blitzortung_strikes (timestamp, lat, lon, distance_km, stations) VALUES (?, ?, ?, ?, ?)",

@@ -1,0 +1,270 @@
+AS3935 Lightning Sensor (lightning2) - Tuning & Analysis Notes
+==============================================================
+Date: April 14-15, 2026
+Hardware: SparkFun AS3935 breakout + Wemos D1 Mini (ESP8266)
+Location: 41.8781, -88.0753 (front porch, outdoors)
+ESPHome version: 2026.3.3
+
+
+CURRENT CONFIGURATION (stable, recommended)
+--------------------------------------------
+  as3935_spi:
+    cs_pin: GPIO16
+    irq_pin: GPIO5
+    indoor: false
+    noise_level: 2
+    watchdog_threshold: 2
+    spike_rejection: 2
+    capacitance: 0
+
+Plus custom ESPHome firmware logic:
+  - logger on_message trigger detects "Disturber was detected" log lines
+  - Counts disturber events in a rolling 30-60s window (two-bucket design)
+  - Publishes "Disturber Rate" sensor (/min) and "Lightning Nearby" binary
+    sensor (ON when rate >= 10 per window) to Home Assistant
+  - This software-based detection is MORE reliable than the chip's native
+    lightning classification (see analysis below)
+
+
+SENSOR BEHAVIOR SUMMARY
+------------------------
+The AS3935 chip has a multi-stage detection pipeline:
+  1. Watchdog threshold - signal must exceed this to be considered at all
+  2. Pattern matching - compares received waveform against expected 500kHz
+     lightning signature (~600us exponential decay envelope)
+  3. Spike rejection - further filters narrow transients
+
+Our sensor reliably detects lightning electromagnetic pulses (correlates
+tightly with Blitzortung ground-truth data) but almost always classifies
+them as "disturbers" rather than "lightning." The native lightning
+classification is unreliable and generates false positives.
+
+
+DATA COLLECTED: STORM OF APRIL 14-15, 2026
+-------------------------------------------
+Storm active roughly 21:00 CDT Apr 14 through 04:00 CDT Apr 15.
+Peak activity 21:00-22:00 CDT with strikes as close as 5.1 km.
+
+Total data collected:
+  - Sensor events: 29,138 (29,073 disturber + 65 lightning + 0 noise)
+  - Blitzortung strikes within 50km: 4,016
+
+Blitzortung strikes by distance:
+  <10 km:   171 strikes
+  10-25 km: 884 strikes
+  25-50 km: 2,956 strikes
+  50+ km:   5 strikes
+
+Blitzortung strikes per hour (UTC):
+  2026-04-15 02:00 (9PM CDT):  1,098 strikes
+  2026-04-15 03:00 (10PM CDT): 1,710 strikes  <-- peak
+  2026-04-15 04:00 (11PM CDT):   573 strikes
+  2026-04-15 05:00 (12AM CDT):   389 strikes
+  (trailing activity through 09:00 UTC)
+
+
+DETECTION RATE ANALYSIS
+-----------------------
+For Blitzortung-confirmed strikes within 25km, we checked whether the
+sensor produced ANY event (disturber or lightning) within 2 seconds:
+
+  Distance band    | Blitz strikes | Sensor detected | Detection rate
+  -----------------+---------------+-----------------+---------------
+  < 10 km          |    171        |    141           |   82.5%
+  10-20 km         |    492        |    368           |   74.8%
+  20-25 km         |    392        |    286           |   73.0%
+  Overall < 25km   |  1,055        |    795           |   75.4%
+
+Key finding: the sensor detects ~75-82% of real lightning strikes as
+measured by Blitzortung, but classifies them ALL as "disturber" rather
+than "lightning." The sensor's RF front-end is working. The pattern
+matcher is the problem.
+
+
+CLASSIFICATION ANALYSIS
+-----------------------
+Of 65 total "lightning" classifications the chip produced:
+  - Most occurred AFTER reorienting the PCB (see Physical Findings below)
+  - Most occurred at minimum thresholds (noise=1, watchdog=1, spike=1)
+  - 0% had Blitzortung correlation within +/-10 seconds
+  - These are FALSE POSITIVES: the chip fires "lightning" on signals that
+    do NOT correspond to real lightning
+
+Hourly sensor event breakdown:
+  Hour (UTC)  | Disturbers | Lightning | Notes
+  ------------+------------+-----------+------
+  02:00       |   1,263    |     0     | Storm arriving, thresholds at 2/2/2
+  03:00       |   2,923    |     0     | Peak storm, all thresholds
+  04:00       |   8,396    |    17     | Post-reorientation + min thresholds
+  05:00       |   9,700    |    31     | Tapering storm, min thresholds
+  06:00       |   6,553    |    17     | Storm gone, false positives
+  07:00+      |    ~100    |     0     | Thresholds restored to 2/2/2
+
+The lightning classifications at 04:00-06:00 correlated with lowered
+thresholds (noise=1, watchdog=1) and PCB reorientation. However, they
+did NOT correlate with actual Blitzortung strikes, making them false
+positives. Restoring thresholds to noise=2, watchdog=2, spike=2
+eliminated the false positives.
+
+
+ANTENNA TUNING
+--------------
+We performed a capacitance sweep using ESPHome's pulse_counter sensor
+to measure the LCO output frequency on the IRQ pin during tune_antenna
+mode. Division ratio confirmed as 16 (AS3935 default).
+
+  Capacitance (index) | Added pF | Measured (Hz) | LCO freq (kHz) | Error vs 500kHz
+  --------------------+----------+---------------+----------------+----------------
+  0  (0 pF)           |    0     |    31,298     |    500.77      |   +0.15%
+  8  (64 pF)          |   64     |    31,210     |    499.36      |   -0.13%
+  15 (120 pF)         |  120     |    30,656     |    490.50      |   -1.90%
+
+Conclusions:
+  - Antenna is within spec at ALL capacitance values (3.5% tolerance)
+  - Best tuning is capacitance=0 (500.77 kHz, +0.15% error)
+  - Tuning was NEVER the cause of misclassification
+  - The sweep is monotonic (freq decreases as cap increases, as expected)
+  - Total swing across full range is ~2%, suggesting the antenna has
+    significant parasitic capacitance beyond the tunable 0-120pF
+
+
+SETTINGS TESTED
+---------------
+Every combination below was tested during active storm conditions.
+None produced reliable lightning classifications.
+
+  indoor | noise | watchdog | spike | cap | Result
+  -------+-------+----------+-------+-----+------------------------------------
+  true   |   3   |    3     |   5   | -   | All disturbers (original config)
+  false  |   2   |    2     |   2   | -   | All disturbers
+  false  |   2   |    2     |   1   | -   | All disturbers
+  false  |   2   |    2     |   2   | 8   | All disturbers (post-tuning)
+  false  |   1   |    1     |   1   | 0   | Lightning appears! But 0% Blitz corr
+  false  |   1   |    1     |   2   | 0   | Same FP rate, spike_rejection no help
+  false  |   2   |    2     |   2   | 0   | All disturbers (current, stable)
+
+("-" means capacitance was unset = default 0)
+
+The only setting change that produced lightning classifications was
+lowering noise_level and watchdog_threshold to 1, combined with the
+physical PCB reorientation. However, these were all false positives.
+
+
+PHYSICAL FINDINGS
+-----------------
+PCB orientation matters significantly:
+  - Before reorientation: PCB leaning on its short edge, antenna bar
+    axis pointing horizontally toward/away from the wall
+  - After reorientation: PCB standing upright, antenna bar (under white
+    sticker at top of SparkFun board) horizontal, perpendicular to wall
+  - The reorientation coincided with the first-ever "lightning"
+    classification, though these turned out to be false positives
+
+The SparkFun AS3935 board has a ferrite bar antenna under a white
+sticker along the top edge. Ferrite bar antennas are most sensitive
+along their long axis. For lightning (horizontal magnetic field),
+the bar should be horizontal.
+
+Moving the sensor from indoors to the front porch made no difference
+in classification behavior (still all disturbers) but did increase
+the event rate (fewer missed events due to building attenuation).
+
+
+BLITZORTUNG INTEGRATION NOTES
+------------------------------
+The comparison tool (lightning-vs-blitzortung.py) connects to the
+Blitzortung WebSocket at wss://ws8.blitzortung.org/.
+
+IMPORTANT: The WebSocket protocol changed (as of 2026). Key details:
+  - Subscription message: {"a": 111} (global feed, NOT a bounding box)
+  - Payloads are LZW-compressed and must be decoded client-side
+  - Filter by radius client-side using haversine
+  - Some servers (ws3-6, ws9-10) have SSL cert issues
+  - Connection drops silently without error; reconnect logic needed
+
+The decode_blitzortung() function in the script handles the LZW
+decompression. See the script source for implementation.
+
+
+SOFTWARE LIGHTNING DETECTION (RECOMMENDED APPROACH)
+---------------------------------------------------
+Since the AS3935's native classification is unreliable, we implemented
+a software-based approach in the ESPHome firmware:
+
+  1. Logger on_message trigger catches AS3935 "Disturber was detected"
+  2. Two-bucket rolling counter: current bucket + previous bucket
+  3. Every 30 seconds, current rolls to previous, current resets
+  4. "Disturber Rate" template sensor published to HA (events per window)
+  5. "Lightning Nearby" binary sensor fires when rate >= 10
+
+This works because:
+  - 75-82% of real strikes produce a sensor event (classified as disturber)
+  - During active storms, disturber rate jumps from ~0/min to 100-300+/min
+  - False quiet-weather disturber rate is very low (~2-4/hour)
+  - The rate-based approach is robust against individual false events
+
+Threshold of 10 per 30s window was chosen to avoid false triggers from
+occasional appliance noise while remaining sensitive enough to detect
+storms with strikes at 25-50km range.
+
+
+RECOMMENDED PHYSICAL NEXT STEPS
+--------------------------------
+If you want to improve the native AS3935 lightning classification
+(beyond the software workaround), consider these in priority order:
+
+1. TRY A DIFFERENT AS3935 MODULE
+   The SparkFun AS3935 (and most cheap modules) are known in the
+   community for unreliable pattern matching. The DFRobot Gravity
+   AS3935 module reportedly has better analog front-end quality.
+   Same chip, different board/antenna design. Cost: ~$30.
+
+2. EXTERNAL ANTENNA
+   The SparkFun board supports an external antenna via the ANT jumper.
+   A properly-designed external 500kHz loop or ferrite rod antenna
+   with better Q factor could produce a cleaner waveform that the
+   pattern matcher accepts. Would require:
+   - Cut the onboard antenna trace (or move the solder jumper)
+   - Connect an external antenna to the ANT pad
+   - Re-tune capacitance after antenna change
+
+3. DEDICATED OUTDOOR ENCLOSURE
+   Build a weather-resistant enclosure for permanent porch mounting.
+   Keep the sensor oriented with the ferrite bar horizontal. Use a
+   linear (non-switching) USB power supply or add a 220uF+ capacitor
+   across the power rails to reduce power supply noise that could
+   corrupt waveforms during the detection window.
+
+4. SECOND SENSOR FOR COMPARISON
+   Run two AS3935 modules simultaneously (different ESPHome nodes).
+   If one classifies lightning correctly and the other doesn't, that
+   confirms a chip-level defect. If both behave identically, it
+   points to environmental factors.
+
+5. CUSTOM FIRMWARE CLASSIFICATION
+   Instead of relying on the AS3935's built-in pattern matcher,
+   capture the raw IRQ timing and energy data and implement a
+   custom classifier. This would be an ESPHome custom component
+   that overrides the AS3935 loop() to:
+   - Record timestamps of ALL events (disturber + lightning)
+   - Compute inter-event timing patterns
+   - Apply a trained model (even a simple heuristic) to classify
+     bursts as "storm activity" vs "local noise"
+   This is effectively what the software binary_sensor already does,
+   but could be more sophisticated.
+
+
+FILES IN THIS PROJECT
+---------------------
+  lightning2.yaml           - Production ESPHome config (with software
+                              lightning detection logic)
+  lightning2-tune.yaml      - Antenna tuning firmware (pulse_counter on
+                              IRQ pin, tune_antenna mode)
+  esphome-log-capture.sh    - Captures ESPHome debug logs to daily files
+                              in logs/ directory
+  lightning-vs-blitzortung.py - Real-time comparison tool: streams
+                              Blitzortung data and tails sensor logs,
+                              stores both in SQLite for correlation
+  lightning_data.db          - SQLite database with all collected data
+                              from the April 14-15 storm session
+  logs/                     - Directory of captured ESPHome log files
