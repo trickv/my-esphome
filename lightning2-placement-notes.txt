@@ -1,0 +1,39 @@
+AS3935 Lightning Sensor Placement Notes
+=======================================
+
+Problem: Sitting on a laptop with a 4" USB cable, the sensor is completely
+overwhelmed by EMI noise — even with all thresholds maxed out.
+
+Mounting Distance from Electronics
+----------------------------------
+- 1 meter (3 ft) minimum from electronics — huge improvement over being on a desk
+- 1-2 meters is the sweet spot — moderate sensitivity, detects storms ~40km out
+- Diminishing returns beyond 3 meters — noise is dominated by household wiring
+  and appliances at that point, not the host device
+
+What to Keep Distance From
+--------------------------
+- Switching power supplies (laptop chargers, phone chargers) — #1 indoor noise source
+- WiFi routers
+- Monitors/TVs
+- The D1 Mini's own WiFi radio (use a 1-2m USB extension cable)
+
+Placement Tips
+--------------
+- Near a window or exterior wall improves sensitivity to actual lightning
+- Use a longer USB cable (1-2m) rather than the 4" one
+- Indoor mode is set in config (indoor: true) which applies appropriate gain
+
+Tuned Config (ground floor window, 1m from electronics, 2026-04-03)
+-------------------------------------------------------------------
+  noise_level: 3       (range 1-7, floor at 2 — triggers disturbers)
+  watchdog_threshold: 8 (range 1-10, floor at 7 — triggers disturbers)
+  spike_rejection: 1   (range 1-11, clean all the way to minimum)
+
+The watchdog_threshold is the dominant filter at this location.
+spike_rejection had no effect — clean even at minimum.
+noise_level floor is at 2 (one disturber per minute).
+
+When moving to the attic (further from electronics), try reducing
+watchdog_threshold first — it may be possible to bring it down to 5-6
+which would improve detection range.
