@@ -46,7 +46,10 @@ sensor:
   - platform: template
     name: "Raw touch value"
     lambda: |-
-        return id(esp32_touch_pad).get_value();
-    update_interval: 3s
-    state_class: "measurement"
-    accuracy_decimals: 1
+      return id(esp32_touch_pad).get_value();
+    update_interval: 60s
+    entity_category: diagnostic
+    state_class: measurement
+    accuracy_decimals: 0
+    filters:
+      - delta: 5

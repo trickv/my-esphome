@@ -1,6 +1,7 @@
 esphome:
   name: power-monitor
-  platform: ESP32
+
+esp32:
   # Board is an ESP32 DevKit v1 looks identical to the 36-pin version of this:
   # https://randomnerdtutorials.com/getting-started-with-esp32/
   board: esp32doit-devkit-v1
@@ -131,7 +132,7 @@ sensor:
     name: "Power L2 Red D34"
     lambda: |-
       return (id(powermon_l2_voltage).state * id(ct_clamp_gpio34).state);
-    update_interval: 1s
+    update_interval: 10s
     id: power_d34
     unit_of_measurement: "W"
     icon: mdi:lightning-bolt-outline
@@ -140,7 +141,7 @@ sensor:
     name: "Power L1 Yellow D35"
     lambda: |-
       return (id(powermon_l1_voltage).state * id(ct_clamp_gpio35).state);
-    update_interval: 1s
+    update_interval: 10s
     id: power_d35
     unit_of_measurement: "W"
     icon: mdi:lightning-bolt-outline
@@ -149,7 +150,7 @@ sensor:
     name: "Power"
     lambda: |-
       return (id(power_d34).state + id(power_d35).state);
-    update_interval: 1s
+    update_interval: 10s
     id: power
     unit_of_measurement: "W"
     icon: mdi:lightning-bolt-outline
@@ -158,7 +159,7 @@ sensor:
     name: "Template Power D34"
     lambda: |-
       return (id(template_voltage).state * id(ct_clamp_gpio34).state);
-    update_interval: 1s
+    update_interval: 10s
     id: template_power_d34
     unit_of_measurement: "W"
     icon: mdi:lightning-bolt-outline
@@ -167,7 +168,7 @@ sensor:
     name: "Template Power D35"
     lambda: |-
       return (id(template_voltage).state * id(ct_clamp_gpio35).state);
-    update_interval: 1s
+    update_interval: 10s
     id: template_power_d35
     unit_of_measurement: "W"
     icon: mdi:lightning-bolt-outline
@@ -176,7 +177,7 @@ sensor:
     name: "Template Power SUM"
     lambda: |-
       return (id(template_power_d34).state + id(template_power_d35).state);
-    update_interval: 1s
+    update_interval: 10s
     id: template_power_sum
     unit_of_measurement: "W"
     icon: mdi:lightning-bolt-outline
